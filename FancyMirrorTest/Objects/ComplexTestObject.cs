@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-
-namespace FancyMirrorTest.test
+﻿namespace FancyMirrorTest.Objects
 {
     public class ComplexTestObject
     {
         public string Name { get; set;}
-        public TestObject NestedObject { get; set; }
+        public SimpleObject NestedObject { get; set; }
 
         public new string ToString()
         {

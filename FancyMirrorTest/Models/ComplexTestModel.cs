@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FancyMirrorTest.fancy;
-
-namespace FancyMirrorTest.test
+﻿namespace FancyMirrorTest.Models
 {
     public class ComplexTestModel
     {
         public ComplexTestModel()
         {
-            NestedModel = new TestModel();
+            NestedModel = new SimpleModel();
         }
 
         public string PoorName { get; set; }
 
-        public TestModel NestedModel { get; set; }
+        public SimpleModel NestedModel { get; set; }
 
         public new string ToString()
         {

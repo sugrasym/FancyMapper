@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 
-namespace FancyMirrorTest.fancy
+namespace FancyMirrorTest.Fancy
 {
 
     public static class FancyUtil

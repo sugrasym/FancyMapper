@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FancyMirrorTest.test
+namespace FancyMirrorTest.Objects
 {
     /// <summary>
     /// This is a test object designed to test the ability for this to handle
@@ -12,7 +12,7 @@ namespace FancyMirrorTest.test
     /// attributes because Entity framework won't and we'll need to be able
     /// to map to and from those objects.
     /// </summary>
-    public class TestObject
+    public class SimpleObject
     {
         public string TestString { get; set; }
         public int TestInt { get; set; }

@@ -41,16 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="fancy\FancyMirror.cs" />
-    <Compile Include="fancy\FancyReflect.cs" />
-    <Compile Include="fancy\FancyUtil.cs" />
-    <Compile Include="fancy\MirrorAttribute.cs" />
+    <Compile Include="Fancy\FancyMirror.cs" />
+    <Compile Include="Fancy\FancyReflect.cs" />
+    <Compile Include="Fancy\FancyUtil.cs" />
+    <Compile Include="Fancy\MirrorAttribute.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="test\ComplexTestModel.cs" />
-    <Compile Include="test\ComplexTestObject.cs" />
-    <Compile Include="test\TestModel.cs" />
-    <Compile Include="test\TestObject.cs" />
+    <Compile Include="Models\ComplexTestModel.cs" />
+    <Compile Include="Objects\ComplexTestObject.cs" />
+    <Compile Include="Models\SimpleModel.cs" />
+    <Compile Include="Objects\SimpleObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

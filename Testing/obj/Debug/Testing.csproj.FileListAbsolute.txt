@@ -1,0 +1,7 @@
+I:\Coding\Visual Studio\FancyMirrorTest\Testing\bin\Debug\Testing.dll
+I:\Coding\Visual Studio\FancyMirrorTest\Testing\bin\Debug\Testing.pdb
+I:\Coding\Visual Studio\FancyMirrorTest\Testing\obj\Debug\Testing.csprojResolveAssemblyReference.cache
+I:\Coding\Visual Studio\FancyMirrorTest\Testing\obj\Debug\Testing.dll
+I:\Coding\Visual Studio\FancyMirrorTest\Testing\obj\Debug\Testing.pdb
+I:\Coding\Visual Studio\FancyMirrorTest\Testing\bin\Debug\FancyMirrorTest.exe
+I:\Coding\Visual Studio\FancyMirrorTest\Testing\bin\Debug\FancyMirrorTest.pdb

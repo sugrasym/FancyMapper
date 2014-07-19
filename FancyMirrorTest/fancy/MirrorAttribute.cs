@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FancyMirrorTest.fancy
+namespace FancyMirrorTest.Fancy
 {
     /// <summary>
     /// A mirror attribute defines the location of a target value in another class as an

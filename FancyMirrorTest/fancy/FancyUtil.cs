@@ -39,7 +39,28 @@ namespace FancyMirrorTest.fancy
                 Console.WriteLine(ExtractMirrorsFromProperty(destinationProperty).First().Path);
             }
 
+            var pairs = new List<Tuple<MirrorAttribute, PropertyInfo>>();
             //find mirror attributes on the destination object
+            List<PropertyInfo> destMirrorProps = GetPropertiesWithMirrors(destination).ToList();
+            List<MirrorAttribute> destMirrors = new List<MirrorAttribute>();
+            foreach (var prop in destMirrorProps)
+            {
+                try
+                {
+                    MirrorAttribute mirror =
+                        ExtractMirrorsFromProperty(prop).Single(x => x.Class == source.GetType().Name);
+                    pairs.Add(new Tuple<MirrorAttribute, PropertyInfo>(mirror, prop));
+                }
+                catch (Exception)
+                {
+                    throw new Exception("A property cannot be mapped to more than one property in a single target class");
+                }
+            }
+
+            foreach (var pair in pairs)
+            {
+                MapMirror(pair.Item1, pair.Item2, source, destination);
+            }
         }
 
         public static void Reflect(object source, object destination)
@@ -52,31 +73,36 @@ namespace FancyMirrorTest.fancy
         /// value onto the appropriate property in the destination
         /// </summary>
         /// <param name="mirror"></param>
-        /// <param name="sourceVal"></param>
+        /// <param name="property"></param>
+        /// <param name="source"></param>
         /// <param name="destination"></param>
         /// <returns></returns>
-        private static void MapMirror(MirrorAttribute mirror, object sourceVal, object destination)
+        private static void MapMirror(MirrorAttribute mirror, PropertyInfo property, object source, object destination)
         {
+            //extract from tuple
             string[] route = mirror.Path.Split('.');
             //the first element is always the class
-            string className = route[0];
+            string className = mirror.Class;
             //the second element is the property (todo: use recursion to handle chaining properties ex Person.Address.StreetName)
             string propName = route[1];
             //verify the type of the target object
-            if (destination.GetType().Name == className)
+            if (source.GetType().Name == className)
             {
-                //get a list of properties on the target object
-                List<PropertyInfo> props = GetPropertiesOnObject(destination).ToList();
+                //get a list of properties on the source object
+                List<PropertyInfo> srcProps = GetPropertiesOnObject(source).ToList();
                 //find the one that matches our property name
-                PropertyInfo targetProp = props.SingleOrDefault(x => x.Name == propName);
-                if (targetProp == null)
+                PropertyInfo sourceProp = srcProps.SingleOrDefault(x => x.Name == propName);
+                if (sourceProp == null)
                 {
                     throw new Exception(
-                        "The property specified by this MirrorAttribute does not exist on the destination object");
+                        "The property specified by this MirrorAttribute does not exist on the source object");
                 }
                 else
                 {
-                    
+                    //todo: verify type sanity
+                    //yolo!
+                    object srcVal = GetValueOfProperty(sourceProp, source);
+                    property.SetValue(destination, srcVal); //what could possibly go wrong?
                 }
             }
             else

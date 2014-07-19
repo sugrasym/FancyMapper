@@ -22,6 +22,20 @@ namespace FancyMirrorTest.fancy
         public string Path { get; set; }
 
         /// <summary>
+        /// Returns the name of the class by splitting the path.
+        /// The first element in the route is always the class.
+        /// </summary>
+        public string Class
+        {
+            get
+            {
+                string[] route = Path.Split('.');
+                return route[0];
+            }
+        }
+
+        /// <summary>
+        /// todo: implement this really cool feature so the documentation isn't lying
         /// Null substitute will be used whenever an incoming or outgoing value is nullable
         /// in one target but not in another. This will be used instead.
         /// 

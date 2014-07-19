@@ -16,6 +16,10 @@ namespace FancyMirrorTest
             MirrorSimpleObject();
             Console.WriteLine("\n");
             MirrorComplexObject();
+            Console.WriteLine("\n");
+            ReflectSimpleObject();
+            //Console.WriteLine("\n");
+            //ReflectComplexObject();
             //keep it from disapearing (I set a breakpoint on this line)
             int nothing = 1;
         }
@@ -91,5 +95,66 @@ namespace FancyMirrorTest
             Console.WriteLine("testObject -> " + testObject.ToString());
             Console.Write("testModel -> " + testModel.ToString());
         }
+
+        private void ReflectSimpleObject()
+        {
+            Console.WriteLine("Reflecting a Simple Model to a Simple Object\n");
+            Console.WriteLine("-- Pre-Reflection --");
+            //create the normal everday test object
+            TestObject testObject = new TestObject();
+
+            //note value in console
+            Console.WriteLine("testObject -> " + testObject.ToString());
+
+            //create our empty model
+            TestModel testModel = new TestModel()
+            {
+                PoorlyNamedString = "Holy crap I'm reflecting!",
+                PoorlyNamedInt = 12345,
+                PoorlyNamedNullableInt = 13
+            };
+
+            //note value in console
+            Console.Write("testModel -> " + testModel.ToString());
+
+            Console.WriteLine("\n");
+            //pray
+            FancyUtil.Reflect(testModel, testObject);
+
+            //note values in console
+            Console.WriteLine("-- Post-Reflection --");
+            Console.WriteLine("testObject -> " + testObject.ToString());
+            Console.Write("testModel -> " + testModel.ToString());
+        }
+
+        /*private void ReflectComplexObject()
+        {
+            Console.WriteLine("Reflecting a Complex Model to a Simple Object\n");
+            Console.WriteLine("-- Pre-Reflection --");
+            //create the normal everday test object
+            TestObject testObject = new TestObject();
+
+            //note value in console
+            Console.WriteLine("testObject -> " + testObject.ToString());
+
+            //create our empty model
+            ComplexTestModel testModel = new ComplexTestModel()
+            {
+                PoorName = "Bad Name",
+                
+            };
+
+            //note value in console
+            Console.Write("testModel -> " + testModel.ToString());
+
+            Console.WriteLine("\n");
+            //pray
+            FancyUtil.Reflect(testModel, testObject);
+
+            //note values in console
+            Console.WriteLine("-- Post-Reflection --");
+            Console.WriteLine("testObject -> " + testObject.ToString());
+            Console.Write("testModel -> " + testModel.ToString());
+        }*/
     }
 }

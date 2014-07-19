@@ -13,7 +13,7 @@ namespace FancyMirrorTest.test
     /// a view or something. It uses custom data annotations to tell FancyUtil
     /// where to reflect / mirror values.
     /// </summary>
-    class TestModel
+    public class TestModel
     {
         [Mirror("TestObject.TestString")]
         [Mirror("ComplexTestObject.Name")]

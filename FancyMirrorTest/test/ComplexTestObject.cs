@@ -1,4 +1,6 @@
-﻿namespace FancyMirrorTest.test
+﻿using System.Collections.Generic;
+
+namespace FancyMirrorTest.test
 {
     public class ComplexTestObject
     {

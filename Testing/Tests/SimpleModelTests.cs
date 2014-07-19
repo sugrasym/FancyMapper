@@ -52,5 +52,33 @@ namespace Testing.Tests
             Assert.AreEqual(obj.TestNullableInt, mod.PoorlyNamedNullableInt);
             Assert.AreEqual(obj.TestString, mod.PoorlyNamedString);
         }
+
+        /// <summary>
+        /// Tests taking a SimpleModel and SimpleObject and reflecting them.
+        /// The SimpleObject's properties should be equivalent to those in
+        /// the SimpleModel after this transformation.
+        /// </summary>
+        [TestMethod]
+        public void TestReflectingSimpleModelIntoComplexObjectShouldBeEquivalent()
+        {
+            //create a simple object with no data
+            SimpleObject obj = new SimpleObject();
+
+            //create a simple model with test data
+            SimpleModel mod = new SimpleModel()
+            {
+                PoorlyNamedInt = 7890,
+                PoorlyNamedNullableInt = 34567,
+                PoorlyNamedString = "Reflect!"
+            };
+
+            //reflect
+            FancyUtil.Reflect(mod, obj);
+
+            //verify equivalency
+            Assert.AreEqual(obj.TestInt, mod.PoorlyNamedInt);
+            Assert.AreEqual(obj.TestNullableInt, mod.PoorlyNamedNullableInt);
+            Assert.AreEqual(obj.TestString, mod.PoorlyNamedString);
+        }
     }
 }

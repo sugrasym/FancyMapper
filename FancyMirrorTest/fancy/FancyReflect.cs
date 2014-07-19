@@ -41,12 +41,13 @@ namespace FancyMirrorTest.Fancy
                     var sourceProp = RecursiveRouteReflect(route, index, 10, destination);
                     if (mirror.WalkChildren)
                     {
-                        FancyUtil.Reflect(FancyUtil.GetValueOfProperty(property, destination),
-                            FancyUtil.GetValueOfProperty(sourceProp.Item1, sourceProp.Item2));
+                        var lp = FancyUtil.GetValueOfProperty(property, source);
+                        var sp = FancyUtil.GetValueOfProperty(sourceProp.Item1, sourceProp.Item2);
+                        FancyUtil.Reflect(lp, sp);
                     }
                     else
                     {
-                        FancyUtil.SetValueOfProperty(sourceProp.Item1, source, sourceProp.Item2, property);
+                        FancyUtil.SetValueOfProperty(sourceProp.Item1, source, sourceProp.Item2, property, mirror.NullSubstitute);
                     }
                 }
                 else

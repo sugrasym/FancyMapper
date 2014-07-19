@@ -39,15 +39,36 @@ namespace FancyMirrorTest.Fancy
                         pairs.Add(new Tuple<MirrorAttribute, PropertyInfo>(mirror, prop));
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw new Exception("A property cannot be mapped to more than one property in a single target class");
+                    if (e is NullReferenceException) throw; //we can't clone anything if the entire source object is null
+                    throw new Exception("A single MirrorAttribute can only be used to map to one class");
                 }
             }
 
             foreach (var pair in pairs)
             {
-                FancyMirror.MapMirror(pair.Item1, pair.Item2, source, destination);
+                try
+                {
+                    FancyMirror.MapMirror(pair.Item1, pair.Item2, source, destination);
+                }
+                catch (Exception e)
+                {
+                    HandleMirrorExceptions(e);
+                }
+            }
+        }
+
+        private static void HandleMirrorExceptions(Exception e)
+        {
+            if (e is NullReferenceException)
+            {
+                //not everything is going to be available to copy at all times
+                throw e;
+            }
+            else
+            {
+                LogException(e);
             }
         }
 
@@ -83,13 +104,21 @@ namespace FancyMirrorTest.Fancy
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("A property cannot be mapped to more than one property in a single target class ");
+                    if (e is NullReferenceException) throw; //we can't clone anything if the entire destination object is null
+                    throw new Exception("A single MirrorAttribute can only be used to map to one class");
                 }
             }
 
             foreach (var pair in pairs)
             {
-                FancyReflect.MapReflect(pair.Item1, pair.Item2, source, destination);
+                try
+                {
+                    FancyReflect.MapReflect(pair.Item1, pair.Item2, source, destination);
+                }
+                catch (Exception e)
+                {
+                    LogException(e);
+                }
             }
         }
 
@@ -134,7 +163,7 @@ namespace FancyMirrorTest.Fancy
         }
 
         /// <summary>
-        /// Evaluates a provided property and its object to find its value
+        /// Evaluates a provided property and its object to find its value.
         /// </summary>
         /// <param name="property"></param>
         /// <param name="o"></param>
@@ -144,11 +173,74 @@ namespace FancyMirrorTest.Fancy
             return property.GetValue(o, null);
         }
 
-        public static void SetValueOfProperty(PropertyInfo property, object source, object destination, PropertyInfo sourceProp)
+        /// <summary>
+        /// Sets the value of property to the value of sourceProp in the context of source and destination objects.
+        /// 
+        /// Differences in nullability (ex int? vs int) can be handled by providing a nullSubstitute value which is
+        /// a place holder for null during this transformation. This makes converting between nullable and non-nullable
+        /// types easy as long as the substitute value is wisely chosen.
+        /// 
+        /// If a nullSubstitute value is provided and the target is not a generic type, then that value is always used
+        /// for null.
+        /// </summary>
+        /// <param name="property"></param>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        /// <param name="sourceProp"></param>
+        /// <param name="nullSubstitute"></param>
+        public static void SetValueOfProperty(PropertyInfo property, object source, object destination, PropertyInfo sourceProp, object nullSubstitute)
         {
-            //todo: verify type sanity
             object srcVal = GetValueOfProperty(sourceProp, source);
+            //perform null substitution
+            if (nullSubstitute != null)
+            {
+                if (property.GetType().IsGenericType)
+                {
+                    /*
+                     * Null substitution is intended to use the nullSubstitute value in place of null
+                     * to resolve differences in the way some pieces of the system store information.
+                     * 
+                     * If the incoming value is null, and the property is not a nullable type, then the
+                     * null substitute value is stored instead.
+                     * 
+                     * If the incoming value is the null substitute value and the property is a
+                     * nullable type, null is used instead.
+                     * 
+                     * The property must be a generic type for this to work.
+                     */
+                    if (srcVal == null)
+                    {
+                        //detect if the destination is a non-nullable type
+                        if (property.PropertyType.GetGenericTypeDefinition() != typeof (Nullable<>))
+                        {
+                            //use null substitute value
+                            srcVal = nullSubstitute;
+                        }
+                    }
+                    else if (srcVal == nullSubstitute)
+                    {
+                        //detect if the destination is a nullable type
+                        if (property.PropertyType.GetGenericTypeDefinition() == typeof (Nullable<>))
+                        {
+                            //use null
+                            srcVal = null;
+                        }
+                    }
+                }
+                else
+                {
+                    //Without a generic type the above does not apply. Just substitute the value every time
+                    srcVal = nullSubstitute;
+                }
+            }
+            //todo: verify type sanity
             property.SetValue(destination, srcVal); //what could possibly go wrong?
+        }
+
+        private static void LogException(Exception e)
+        {
+            //todo: do something more reasonable
+            throw e;
         }
     }
 }

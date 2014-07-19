@@ -16,12 +16,15 @@ namespace FancyMirrorTest.Models
     public class SimpleModel
     {
         [Mirror("SimpleObject.TestString")]
+        [Mirror("SimpleObjectWithNullables.TestString", NullSubstitute = "Null")]
         public string PoorlyNamedString { get; set; }
 
         [Mirror("SimpleObject.TestInt")]
+        [Mirror("SimpleObjectWithNullables.AValue", NullSubstitute = 5)]
         public int PoorlyNamedInt { get; set; }
 
         [Mirror("SimpleObject.TestNullableInt")]
+        [Mirror("SimpleObjectWithNullables.BValue")]
         public int? PoorlyNamedNullableInt { get; set; }
 
         public new string ToString()

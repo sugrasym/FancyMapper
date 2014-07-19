@@ -81,5 +81,72 @@ namespace Testing.Tests
             Assert.AreEqual(obj.TestNullableInt, mod.PoorlyNamedNullableInt);
             Assert.AreEqual(obj.TestString, mod.PoorlyNamedString);
         }
+
+        /// <summary>
+        /// This method tests what happens when you attempt to mirror null into a model.
+        /// It should fail without changing the state of the model, and will throw an
+        /// exception.
+        /// </summary>
+        [TestMethod]
+        public void TestMirroringNullIntoSimpleModelShouldThrowExceptionWithPropertiesUnchanged()
+        {
+            //create simple object with test data
+            SimpleObject obj = null;
+
+            //create a simple model with original data
+            SimpleModel mod = new SimpleModel()
+            {
+                PoorlyNamedInt = 1,
+                PoorlyNamedNullableInt = 5,
+                PoorlyNamedString = "This should still be here"
+            };
+
+            bool thrown = false;
+
+            //mirror
+            try
+            {
+                FancyUtil.Mirror(null, mod);
+            }
+            catch (Exception e)
+            {
+                thrown = true;
+            }
+
+            //verify equivalency
+            Assert.AreEqual("This should still be here", mod.PoorlyNamedString);
+            Assert.AreEqual(1, mod.PoorlyNamedInt);
+            Assert.AreEqual(5, mod.PoorlyNamedNullableInt);
+
+            //and that the exception was thrown
+            Assert.AreEqual(thrown, true);
+        }
+
+        /// <summary>
+        /// Tests the ability for null substitution to handle converting incoming nullable values
+        /// into ones that the model can tolerate.
+        /// </summary>
+        [TestMethod]
+        public void TestMirroringModelWithNullableIntIntoNonNullibleModelShouldUseNullSubstituteValue()
+        {
+            //create a simple object with nulls
+            SimpleObjectWithNullables obj = new SimpleObjectWithNullables()
+            {
+                AValue = null,
+                BValue = null,
+                TestString = null
+            };
+
+            //create an empty simple model
+            SimpleModel mod = new SimpleModel();
+
+            //mirror
+            FancyUtil.Mirror(obj, mod);
+
+            //verify expected null substitutes
+            Assert.AreEqual("Null", mod.PoorlyNamedString);
+            Assert.AreEqual(5, mod.PoorlyNamedInt);
+            Assert.AreEqual(null, mod.PoorlyNamedNullableInt); //this one can be null because it is nullable in the destination
+        }
     }
 }

@@ -43,7 +43,7 @@ namespace FancyMirrorTest.Fancy
                     }
                     else
                     {
-                        FancyUtil.SetValueOfProperty(property, sourceProp.Item2, destination, sourceProp.Item1);
+                        FancyUtil.SetValueOfProperty(property, sourceProp.Item2, destination, sourceProp.Item1, mirror.NullSubstitute);
                     }
                 }
                 else

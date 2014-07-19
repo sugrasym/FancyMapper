@@ -69,31 +69,86 @@ namespace FancyMirrorTest.fancy
             string[] route = mirror.Path.Split('.');
             //the first element is always the class
             string className = mirror.Class;
-            //the second element is the property (todo: use recursion to handle chaining properties ex Person.Address.StreetName)
+            //the second element is the property
             string propName = route[1];
             //verify the type of the target object
             if (source.GetType().Name == className)
             {
-                //get a list of properties on the source object
-                List<PropertyInfo> srcProps = GetPropertiesOnObject(source).ToList();
-                //find the one that matches our property name
-                PropertyInfo sourceProp = srcProps.SingleOrDefault(x => x.Name == propName);
-                if (sourceProp == null)
+                if (route.Length == 2)
                 {
-                    throw new Exception(
-                        "The property specified by this MirrorAttribute does not exist on the source object");
+                    //get a list of properties on the source object
+                    List<PropertyInfo> srcProps = GetPropertiesOnObject(source).ToList();
+                    //find the one that matches our property name
+                    PropertyInfo sourceProp = srcProps.SingleOrDefault(x => x.Name == propName);
+                    if (sourceProp == null)
+                    {
+                        throw new Exception(
+                            "The property specified by this MirrorAttribute does not exist on the source object");
+                    }
+                    else
+                    {
+                        SetValueOfProperty(property, source, destination, sourceProp);
+                    }
                 }
                 else
                 {
-                    //todo: verify type sanity
-                    //yolo!
-                    object srcVal = GetValueOfProperty(sourceProp, source);
-                    property.SetValue(destination, srcVal); //what could possibly go wrong?
+                    //must be solved using recursion
+                    var sourceProp = RecursiveRouteMirror(route, 1, 10, source);
+                    SetValueOfProperty(property, sourceProp.Item2 , destination, sourceProp.Item1);
                 }
             }
             else
             {
                 throw new Exception("A single MirrorAttribute can only be used to map to one class");
+            }
+        }
+
+        private static void SetValueOfProperty(PropertyInfo property, object source, object destination, PropertyInfo sourceProp)
+        {
+            //todo: verify type sanity
+            object srcVal = GetValueOfProperty(sourceProp, source);
+            property.SetValue(destination, srcVal); //what could possibly go wrong?
+        }
+
+        /// <summary>
+        /// Walks down the route recursively locating properties until the end point is reached, and then returns
+        /// that final property.
+        /// </summary>
+        /// <param name="route"></param>
+        /// <param name="routeIndex"></param>
+        /// <param name="limit"></param>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        private static Tuple<PropertyInfo, object> RecursiveRouteMirror(string[] route, int routeIndex, int limit, object source)
+        {
+            if (routeIndex > limit)
+            {
+                throw new Exception("Aborted recursive routing, will not attempt to use an index greater than "+limit);
+            }
+
+            //get the current route position
+            string current = route[routeIndex];
+            //get list of properties on source
+            List<PropertyInfo> props = GetPropertiesOnObject(source).ToList();
+            //select the one that matches this step of the route
+            PropertyInfo prop = props.SingleOrDefault(x => x.Name == current);
+            if (prop == null)
+            {
+                throw new Exception(
+                    "The route provided by this MirrorAttribute is not a valid path to the target property");
+            }
+            else
+            {
+                //is this the end of the chain?
+                if (route.Length - 1 == routeIndex)
+                {
+                    return new Tuple<PropertyInfo, object>(prop, source);
+                }
+                else
+                {
+                    //go further down the chain
+                    return RecursiveRouteMirror(route, routeIndex + 1, limit, GetValueOfProperty(prop, source));
+                }
             }
         }
 

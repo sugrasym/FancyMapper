@@ -42,6 +42,7 @@ namespace FancyMirrorTest
             //note value in console
             Console.Write("testModel -> "+testModel.ToString());
 
+            Console.WriteLine("\n");
             //pray
             FancyUtil.Mirror(testObject, testModel);
 

@@ -18,38 +18,25 @@ namespace FancyMirrorTest.fancy
         /// <param name="destination"></param>
         public static void Mirror(object source, object destination)
         {
-            //get a list of properties on the source object
-            IEnumerable<PropertyInfo> sourceProperties = GetPropertiesOnObject(source);
-
-            //get a list of properties on the destination object
-            IEnumerable<PropertyInfo> destinationProperties = GetPropertiesOnObject(destination);
-
-            //debug
-            Console.WriteLine("\n\nFound source");
-            foreach (var sourceProperty in sourceProperties)
-            {
-                Console.WriteLine(GetValueOfProperty(sourceProperty, source));
-            }
-
-            //debug
-            IEnumerable<PropertyInfo> ptr = GetPropertiesWithMirrors(destination);
-            Console.WriteLine("\n\nFound dest");
-            foreach (var destinationProperty in ptr)
-            {
-                Console.WriteLine(ExtractMirrorsFromProperty(destinationProperty).First().Path);
-            }
-
             var pairs = new List<Tuple<MirrorAttribute, PropertyInfo>>();
             //find mirror attributes on the destination object
             List<PropertyInfo> destMirrorProps = GetPropertiesWithMirrors(destination).ToList();
-            List<MirrorAttribute> destMirrors = new List<MirrorAttribute>();
             foreach (var prop in destMirrorProps)
             {
                 try
                 {
                     MirrorAttribute mirror =
-                        ExtractMirrorsFromProperty(prop).Single(x => x.Class == source.GetType().Name);
-                    pairs.Add(new Tuple<MirrorAttribute, PropertyInfo>(mirror, prop));
+                        ExtractMirrorsFromProperty(prop).SingleOrDefault(x => x.Class == source.GetType().Name);
+                    
+                    if (mirror == null)
+                    {
+                        //this property doesn't have a mirror to this object
+                        Console.WriteLine("Mirror was unable to map the property "+prop.Name+" because it has no route for the source class");
+                    }
+                    else
+                    {
+                        pairs.Add(new Tuple<MirrorAttribute, PropertyInfo>(mirror, prop));
+                    }
                 }
                 catch (Exception)
                 {
@@ -69,8 +56,8 @@ namespace FancyMirrorTest.fancy
         }
 
         /// <summary>
-        /// Provided a mirror attribute, source value, and destination object, this will map the
-        /// value onto the appropriate property in the destination
+        /// Maps the provided property with the value of the property in the source object that is referenced
+        /// using the path in the mirror.
         /// </summary>
         /// <param name="mirror"></param>
         /// <param name="property"></param>
@@ -79,7 +66,6 @@ namespace FancyMirrorTest.fancy
         /// <returns></returns>
         private static void MapMirror(MirrorAttribute mirror, PropertyInfo property, object source, object destination)
         {
-            //extract from tuple
             string[] route = mirror.Path.Split('.');
             //the first element is always the class
             string className = mirror.Class;

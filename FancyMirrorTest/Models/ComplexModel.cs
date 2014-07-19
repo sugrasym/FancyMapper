@@ -1,14 +1,20 @@
-﻿namespace FancyMirrorTest.Models
+﻿using FancyMirrorTest.Fancy;
+
+namespace FancyMirrorTest.Models
 {
-    public class ComplexTestModel
+    public class ComplexModel
     {
-        public ComplexTestModel()
+        public ComplexModel()
         {
             NestedModel = new SimpleModel();
         }
 
+        [Mirror("SimpleObject.SomeString")]
+        [Mirror("ComplexObject.Name")]
         public string PoorName { get; set; }
 
+        [Mirror("SimpleObject")]
+        [Mirror("ComplexObject.NestedObject", WalkChildren = true)]
         public SimpleModel NestedModel { get; set; }
 
         public new string ToString()

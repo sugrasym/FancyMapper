@@ -1,6 +1,6 @@
 ﻿namespace FancyMirrorTest.Objects
 {
-    public class ComplexTestObject
+    public class ComplexObject
     {
         public string Name { get; set;}
         public SimpleObject NestedObject { get; set; }

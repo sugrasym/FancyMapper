@@ -18,6 +18,8 @@ namespace FancyMirrorTest.Objects
         public int TestInt { get; set; }
         public int? TestNullableInt { get; set; }
 
+        public string SomeString { get; set; }
+
         public new string ToString()
         {
             return "TestString: " + TestString + ", TestInt: " + TestInt + ", TestNullableInt: " + TestNullableInt;

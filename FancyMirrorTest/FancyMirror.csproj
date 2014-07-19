@@ -47,8 +47,8 @@
     <Compile Include="Fancy\MirrorAttribute.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\ComplexTestModel.cs" />
-    <Compile Include="Objects\ComplexTestObject.cs" />
+    <Compile Include="Models\ComplexModel.cs" />
+    <Compile Include="Objects\ComplexObject.cs" />
     <Compile Include="Models\SimpleModel.cs" />
     <Compile Include="Objects\SimpleObject.cs" />
   </ItemGroup>

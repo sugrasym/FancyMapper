@@ -38,7 +38,8 @@ namespace Testing.Tests
             {
                 TestInt = 12345,
                 TestNullableInt = 65432,
-                TestString = "Mirror!"
+                TestString = "Mirror!",
+                SomeString = "I'm an unwanted string!"
             };
 
             //create a simple model with no data

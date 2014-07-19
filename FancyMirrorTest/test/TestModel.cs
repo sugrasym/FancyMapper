@@ -15,16 +15,10 @@ namespace FancyMirrorTest.test
     /// </summary>
     public class TestModel
     {
-        [Mirror("TestObject.TestString")]
-        [Mirror("ComplexTestObject.Name")]
         public string PoorlyNamedString { get; set; }
 
-        [Mirror("TestObject.TestInt")]
-        [Mirror("ComplexTestObject.NestedObject.TestInt")]
         public int PoorlyNamedInt { get; set; }
 
-        [Mirror("TestObject.TestNullableInt", NullSubstitute = 0)]
-        [Mirror("ComplexTestObject.NestedObject.TestNullableInt")]
         public int? PoorlyNamedNullableInt { get; set; }
 
         public new string ToString()

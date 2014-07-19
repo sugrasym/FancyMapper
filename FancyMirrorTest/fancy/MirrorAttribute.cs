@@ -44,6 +44,13 @@ namespace FancyMirrorTest.fancy
         /// </summary>
         public object NullSubstitute { get; set; }
 
+        /// <summary>
+        /// When true, this mirror will be evaluated in its own context and any child
+        /// properties it contains will be evaluated against the object in its path.
+        /// 
+        /// Use this if you are nesting a model inside a model and the nested model
+        /// has mirror attributes on its own properties.
+        /// </summary>
         public bool WalkChildren { get; set; }
 
         public MirrorAttribute(String path)

@@ -9,9 +9,17 @@ namespace FancyMirrorTest.test
 {
     public class ComplexTestModel
     {
-        [Mirror("ComplexTestObject.Name")]
+        public ComplexTestModel()
+        {
+            NestedModel = new TestModel();
+        }
+
+        [Mirror("TestObject.TestString")]
+        [Mirror("ComplexTestObject.NestedObject.TestString")]
         public string PoorName { get; set; }
 
+        [Mirror("ComplexTestObject.NestedObject")]
+        [Mirror("TestObject")]
         public TestModel NestedModel { get; set; }
 
         public new string ToString()

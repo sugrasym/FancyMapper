@@ -11,7 +11,7 @@ namespace FancyMirrorTest.fancy
     /// relative path.
     /// 
     /// Valid mapping
-    /// Class.Property
+    /// Class.Property.ChildProperty ... FinalProperty
     /// 
     /// More than one mirror can be placed on any property.
     /// </summary>
@@ -42,12 +42,15 @@ namespace FancyMirrorTest.fancy
         /// Ex mirroring an int? onto an int would use nullSubstitute for the value if the
         /// source is null.
         /// </summary>
-        protected object NullSubstitute { get; set; }
+        public object NullSubstitute { get; set; }
 
-        public MirrorAttribute(String path, object nullSubstitute = null)
+        public bool WalkChildren { get; set; }
+
+        public MirrorAttribute(String path)
         {
-            this.Path = path;
-            this.NullSubstitute = nullSubstitute;
+            Path = path;
+            NullSubstitute = null;
+            WalkChildren = false;
         }
     }
 }

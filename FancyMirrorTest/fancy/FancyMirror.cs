@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,32 +24,23 @@ namespace FancyMirrorTest.fancy
             string[] route = mirror.Path.Split('.');
             //the first element is always the class
             string className = mirror.Class;
-            //the second element is the property
-            string propName = route[1];
             //verify the type of the target object
             if (source.GetType().Name == className)
             {
-                if (route.Length == 2)
+                //must be solved using recursion
+                if (route.Length == 1)
                 {
-                    //get a list of properties on the source object
-                    List<PropertyInfo> srcProps = FancyUtil.GetPropertiesOnObject(source).ToList();
-                    //find the one that matches our property name
-                    PropertyInfo sourceProp = srcProps.SingleOrDefault(x => x.Name == propName);
-                    if (sourceProp == null)
-                    {
-                        throw new Exception(
-                            "The property specified by this MirrorAttribute does not exist on the source object");
-                    }
-                    else
-                    {
-                        FancyUtil.SetValueOfProperty(property, source, destination, sourceProp);
-                    }
+                    var lp = FancyUtil.GetValueOfProperty(property, destination);
+                    FancyUtil.Mirror(source, lp);
+                }
+                else if (route.Length > 0)
+                {
+                    var sourceProp = RecursiveRouteMirror(route, 1, 10, source);
+                    FancyUtil.SetValueOfProperty(property, sourceProp.Item2, destination, sourceProp.Item1);
                 }
                 else
                 {
-                    //must be solved using recursion
-                    var sourceProp = RecursiveRouteMirror(route, 1, 10, source);
-                    FancyUtil.SetValueOfProperty(property, sourceProp.Item2, destination, sourceProp.Item1);
+                    throw new Exception("Empty routes cannot be evaluated");
                 }
             }
             else

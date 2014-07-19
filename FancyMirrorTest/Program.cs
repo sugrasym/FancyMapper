@@ -13,13 +13,16 @@ namespace FancyMirrorTest
 
         public Program()
         {
-            MirrorSimpleObject();
-            Console.WriteLine("\n");
-            MirrorComplexObject();
-            Console.WriteLine("\n");
-            ReflectSimpleObject();
+            //MirrorSimpleObject();
+            //Console.WriteLine("\n");
+            //MirrorComplexObject();
+            //Console.WriteLine("\n");
+            //MirrorComplexObjects();
+            //Console.WriteLine("\n");
+            //ReflectSimpleObject();
             //Console.WriteLine("\n");
             //ReflectComplexObject();
+            MirrorSimpleObjectComplexModel();
             //keep it from disapearing (I set a breakpoint on this line)
             int nothing = 1;
         }
@@ -50,6 +53,37 @@ namespace FancyMirrorTest
 
             //note value in console
             Console.Write("testModel -> "+testModel.ToString());
+
+            Console.WriteLine("\n");
+            //pray
+            FancyUtil.Mirror(testObject, testModel);
+
+            //note values in console
+            Console.WriteLine("-- Post-Reflection --");
+            Console.WriteLine("testObject -> " + testObject.ToString());
+            Console.Write("testModel -> " + testModel.ToString());
+        }
+
+        private void MirrorSimpleObjectComplexModel()
+        {
+            Console.WriteLine("Mirroring a Simple Object to a Complex Model\n");
+            Console.WriteLine("-- Pre-Reflection --");
+            //this object is slightly harder because it has to be solved using recursion
+            TestObject testObject = new TestObject()
+            {
+                TestInt = 10101,
+                TestNullableInt = 24,
+                TestString = "This is a string"
+            };
+
+            //note value in console
+            Console.WriteLine("testObject -> " + testObject.ToString());
+
+            //create our empty model
+            ComplexTestModel testModel = new ComplexTestModel();
+
+            //note value in console
+            Console.Write("testModel -> " + testModel.ToString());
 
             Console.WriteLine("\n");
             //pray
@@ -96,6 +130,41 @@ namespace FancyMirrorTest
             Console.Write("testModel -> " + testModel.ToString());
         }
 
+        private void MirrorComplexObjects()
+        {
+            Console.WriteLine("Mirroring a Complex Object to a Complex Model\n");
+            Console.WriteLine("-- Pre-Reflection --");
+            //this object is slightly harder because it has to be solved using recursion
+            ComplexTestObject testObject = new ComplexTestObject()
+            {
+                Name = "Complex Object Thingy",
+                NestedObject = new TestObject()
+                {
+                    TestInt = 10101,
+                    TestNullableInt = 24,
+                    TestString = "This is a string"
+                }
+            };
+
+            //note value in console
+            Console.WriteLine("testObject -> " + testObject.ToString());
+
+            //create our empty model
+            ComplexTestModel testModel = new ComplexTestModel();
+
+            //note value in console
+            Console.Write("testModel -> " + testModel.ToString());
+
+            Console.WriteLine("\n");
+            //pray
+            FancyUtil.Mirror(testObject, testModel);
+
+            //note values in console
+            Console.WriteLine("-- Post-Reflection --");
+            Console.WriteLine("testObject -> " + testObject.ToString());
+            Console.Write("testModel -> " + testModel.ToString());
+        }
+
         private void ReflectSimpleObject()
         {
             Console.WriteLine("Reflecting a Simple Model to a Simple Object\n");
@@ -106,7 +175,7 @@ namespace FancyMirrorTest
             //note value in console
             Console.WriteLine("testObject -> " + testObject.ToString());
 
-            //create our empty model
+            //create our test model
             TestModel testModel = new TestModel()
             {
                 PoorlyNamedString = "Holy crap I'm reflecting!",
@@ -127,7 +196,7 @@ namespace FancyMirrorTest
             Console.Write("testModel -> " + testModel.ToString());
         }
 
-        /*private void ReflectComplexObject()
+        private void ReflectComplexObject()
         {
             Console.WriteLine("Reflecting a Complex Model to a Simple Object\n");
             Console.WriteLine("-- Pre-Reflection --");
@@ -137,11 +206,16 @@ namespace FancyMirrorTest
             //note value in console
             Console.WriteLine("testObject -> " + testObject.ToString());
 
-            //create our empty model
+            //create our test model
             ComplexTestModel testModel = new ComplexTestModel()
             {
                 PoorName = "Bad Name",
-                
+                NestedModel = new TestModel()
+                {
+                    PoorlyNamedString = "abc",
+                    PoorlyNamedInt = 123,
+                    PoorlyNamedNullableInt = 2456
+                }
             };
 
             //note value in console
@@ -155,6 +229,6 @@ namespace FancyMirrorTest
             Console.WriteLine("-- Post-Reflection --");
             Console.WriteLine("testObject -> " + testObject.ToString());
             Console.Write("testModel -> " + testModel.ToString());
-        }*/
+        }
     }
 }

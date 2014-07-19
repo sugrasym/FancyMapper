@@ -23,7 +23,7 @@ namespace FancyMirrorTest.test
         [Mirror("ComplexTestObject.NestedObject.TestInt")]
         public int PoorlyNamedInt { get; set; }
 
-        [Mirror("TestObject.TestNullableInt", 0)]
+        [Mirror("TestObject.TestNullableInt", NullSubstitute = 0)]
         [Mirror("ComplexTestObject.NestedObject.TestNullableInt")]
         public int? PoorlyNamedNullableInt { get; set; }
 

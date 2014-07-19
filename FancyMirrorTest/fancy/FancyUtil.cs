@@ -32,7 +32,7 @@ namespace FancyMirrorTest.fancy
                     if (mirror == null)
                     {
                         //this property doesn't have a mirror to this object
-                        Console.WriteLine("Mirror was unable to map the property "+prop.Name+" because it has no route for the source class");
+                        Console.WriteLine("Mirror was unable to map the property "+prop.Name+" because it has no route for the source class "+source.GetType().Name);
                     }
                     else
                     {
@@ -74,7 +74,7 @@ namespace FancyMirrorTest.fancy
                     {
                         //this property doesn't have a mirror to this object
                         Console.WriteLine("Reflect was unable to map the property " + prop.Name +
-                                          " because it has no route for the destination class");
+                                          " because it has no route for the destination class " + destination.GetType().Name);
                     }
                     else
                     {
@@ -83,7 +83,7 @@ namespace FancyMirrorTest.fancy
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("A property cannot be mapped to more than one property in a single target class");
+                    throw new Exception("A property cannot be mapped to more than one property in a single target class ");
                 }
             }
 

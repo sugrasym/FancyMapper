@@ -13,10 +13,11 @@ namespace FancyMirrorTest
 
         public Program()
         {
-            //MirrorSimpleObject();
+            MirrorSimpleObject();
+            Console.WriteLine("\n");
             MirrorComplexObject();
             //keep it from disapearing (I set a breakpoint on this line)
-            int nothing = 1; ;
+            int nothing = 1;
         }
 
         static void Main(string[] args)
@@ -51,7 +52,6 @@ namespace FancyMirrorTest
             FancyUtil.Mirror(testObject, testModel);
 
             //note values in console
-            Console.WriteLine("\n");
             Console.WriteLine("-- Post-Reflection --");
             Console.WriteLine("testObject -> " + testObject.ToString());
             Console.Write("testModel -> " + testModel.ToString());
@@ -59,7 +59,7 @@ namespace FancyMirrorTest
 
         private void MirrorComplexObject()
         {
-            Console.WriteLine("Mirroring a Complex Object to a Simple Model");
+            Console.WriteLine("Mirroring a Complex Object to a Simple Model\n");
             Console.WriteLine("-- Pre-Reflection --");
             //this object is slightly harder because it has to be solved using recursion
             ComplexTestObject testObject = new ComplexTestObject()
@@ -87,7 +87,6 @@ namespace FancyMirrorTest
             FancyUtil.Mirror(testObject, testModel);
 
             //note values in console
-            Console.WriteLine("\n");
             Console.WriteLine("-- Post-Reflection --");
             Console.WriteLine("testObject -> " + testObject.ToString());
             Console.Write("testModel -> " + testModel.ToString());

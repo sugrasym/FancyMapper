@@ -111,14 +111,14 @@ namespace FancyMirrorTest.Fancy
 
             foreach (var pair in pairs)
             {
-                try
-                {
+                //try
+                //{
                     FancyReflect.MapReflect(pair.Item1, pair.Item2, source, destination);
-                }
+                /*}
                 catch (Exception e)
                 {
                     LogException(e);
-                }
+                }*/
             }
         }
 

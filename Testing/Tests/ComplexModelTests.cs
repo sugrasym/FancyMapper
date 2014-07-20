@@ -160,11 +160,24 @@ namespace Testing.Tests
             Assert.AreEqual(obj.NestedObject.TestString, mod.NestedModel.PoorlyNamedString);
         }
 
+        /// <summary>
+        /// This test actually demonstrates a weakness in this code.
+        /// </summary>
         [TestMethod]
         public void TestReflectingComplexModelIntoComplexObjectShouldBeEquivalent()
         {
             //create a complex object with no data
-            ComplexObject obj = new ComplexObject();
+            ComplexObject obj = new ComplexObject()
+            {
+                /*
+                 * Due to constraints on reflection this test would actually fail if this object
+                 * were not instantiated. That makes sense, since you can't set a child property
+                 * if the parent property is null, but it kind of sucks that I can't find a way
+                 * to dynamically instantiate null references at runtime (unless they are an
+                 * object - and ONLY an object)
+                 */
+                NestedObject = new SimpleObject()
+            };
 
             //create a complex model with test data
             ComplexModel mod = new ComplexModel()

@@ -24,7 +24,6 @@ namespace FancyMirrorTest.Fancy
             string[] route = mirror.Path.Split('.');
             //the first element is always the class
             string className = mirror.Class;
-            //how to evaluate this mirror attribute
             //verify the type of the target object
             if (destination.GetType().Name == className)
             {
@@ -43,6 +42,25 @@ namespace FancyMirrorTest.Fancy
                     {
                         var lp = FancyUtil.GetValueOfProperty(property, source);
                         var sp = FancyUtil.GetValueOfProperty(sourceProp.Item1, sourceProp.Item2);
+                        if (sp == null)
+                        {
+                            //todo: determine if this can be circumvented
+                            /*
+                             * I really wanted to be able to automatically instantiate properties which were null
+                             * using their parameterless constructor, but that is quickly starting to look like
+                             * its impossible. The problem seems to be that to convert all but the most trivial
+                             * primatives you need to know the type you are converting to at compile time (which
+                             * I don't) even if I know the type at runtime (which I do).
+                             */
+                            throw new NullReferenceException("Unable to map to property "+sourceProp.Item1.Name+" because it is null");
+                            /*var t = sourceProp.Item1;
+                            var parent = sourceProp.Item2;
+                            //It isn't possible to reflect properties into a null object, so it needs to be instantiated
+                            var o = Activator.CreateInstance(t.PropertyType); //I hope it has a parameterless constructor
+                            var p = parent.GetType().GetProperty(t.Name);
+                            p.SetValue(p,o);
+                            sp = FancyUtil.GetValueOfProperty(sourceProp.Item1, sourceProp.Item2);*/
+                        }
                         FancyUtil.Reflect(lp, sp);
                     }
                     else

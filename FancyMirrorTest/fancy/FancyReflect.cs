@@ -44,22 +44,9 @@ namespace FancyMirrorTest.Fancy
                         var sp = FancyUtil.GetValueOfProperty(sourceProp.Item1, sourceProp.Item2);
                         if (sp == null)
                         {
-                            //todo: determine if this can be circumvented
-                            /*
-                             * I really wanted to be able to automatically instantiate properties which were null
-                             * using their parameterless constructor, but that is quickly starting to look like
-                             * its impossible. The problem seems to be that to convert all but the most trivial
-                             * primatives you need to know the type you are converting to at compile time (which
-                             * I don't) even if I know the type at runtime (which I do).
-                             */
-                            throw new NullReferenceException("Unable to map to property "+sourceProp.Item1.Name+" because it is null in the target");
-                            /*var t = sourceProp.Item1;
-                            var parent = sourceProp.Item2;
-                            //It isn't possible to reflect properties into a null object, so it needs to be instantiated
-                            var o = Activator.CreateInstance(t.PropertyType); //I hope it has a parameterless constructor
-                            var p = parent.GetType().GetProperty(t.Name);
-                            p.SetValue(p,o);
-                            sp = FancyUtil.GetValueOfProperty(sourceProp.Item1, sourceProp.Item2);*/
+                            //attempt to instantiate a new one on the fly so we have somewhere to put these values
+                            bool safe = FancyResolver.ResolveNullDestination(sourceProp, ref sp);
+                            if (!safe) throw new NullReferenceException("Unable to map to property " + sourceProp.Item1.Name + " because it is null in the target");
                         }
                         FancyUtil.Reflect(lp, sp);
                     }
@@ -78,6 +65,8 @@ namespace FancyMirrorTest.Fancy
                 throw new Exception("A single MirrorAttribute can only be used to map to one class");
             }
         }
+
+        
 
         /// <summary>
         /// Walks down the route recursively locating properties until the end point is reached, and then returns

@@ -168,17 +168,7 @@ namespace Testing.Tests
         public void TestReflectingComplexModelIntoComplexObjectShouldBeEquivalent()
         {
             //create a complex object with no data
-            ComplexObject obj = new ComplexObject()
-            {
-                /*
-                 * Due to constraints on reflection this test would actually fail if this object
-                 * were not instantiated. That makes sense, since you can't set a child property
-                 * if the parent property is null, but it kind of sucks that I can't find a way
-                 * to dynamically instantiate null references at runtime (unless they are an
-                 * object - and ONLY an object)
-                 */
-                NestedObject = new SimpleObject()
-            };
+            ComplexObject obj = new ComplexObject();
 
             //create a complex model with test data
             ComplexModel mod = new ComplexModel()

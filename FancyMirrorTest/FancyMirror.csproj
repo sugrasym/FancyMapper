@@ -45,6 +45,7 @@
     <Compile Include="Fancy\FancyReflect.cs" />
     <Compile Include="Fancy\FancyUtil.cs" />
     <Compile Include="Fancy\MirrorAttribute.cs" />
+    <Compile Include="Objects\OverlyComplexObject.cs" />
     <Compile Include="Objects\SimpleObjectWithNullables.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

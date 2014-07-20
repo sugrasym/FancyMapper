@@ -48,14 +48,14 @@ namespace FancyMirrorTest.Fancy
 
             foreach (var pair in pairs)
             {
-                try
-                {
+                //try
+                //{
                     FancyMirror.MapMirror(pair.Item1, pair.Item2, source, destination);
-                }
-                catch (Exception e)
+                //}
+                /*catch (Exception e)
                 {
                     HandleMirrorExceptions(e);
-                }
+                }*/
             }
         }
 
@@ -111,14 +111,7 @@ namespace FancyMirrorTest.Fancy
 
             foreach (var pair in pairs)
             {
-                //try
-                //{
-                    FancyReflect.MapReflect(pair.Item1, pair.Item2, source, destination);
-                /*}
-                catch (Exception e)
-                {
-                    LogException(e);
-                }*/
+                FancyReflect.MapReflect(pair.Item1, pair.Item2, source, destination);
             }
         }
 

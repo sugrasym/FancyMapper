@@ -52,7 +52,7 @@ namespace FancyMirrorTest.Fancy
                              * primatives you need to know the type you are converting to at compile time (which
                              * I don't) even if I know the type at runtime (which I do).
                              */
-                            throw new NullReferenceException("Unable to map to property "+sourceProp.Item1.Name+" because it is null");
+                            throw new NullReferenceException("Unable to map to property "+sourceProp.Item1.Name+" because it is null in the target");
                             /*var t = sourceProp.Item1;
                             var parent = sourceProp.Item2;
                             //It isn't possible to reflect properties into a null object, so it needs to be instantiated

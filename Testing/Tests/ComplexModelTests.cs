@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using FancyMirrorTest.Fancy;
 using FancyMirrorTest.Models;
 using FancyMirrorTest.Objects;
@@ -199,6 +200,65 @@ namespace Testing.Tests
             Assert.AreEqual(obj.NestedObject.TestInt, mod.NestedModel.PoorlyNamedInt);
             Assert.AreEqual(obj.NestedObject.TestNullableInt, mod.NestedModel.PoorlyNamedNullableInt);
             Assert.AreEqual(obj.NestedObject.TestString, mod.NestedModel.PoorlyNamedString);
+        }
+
+        [TestMethod]
+        public void TestMirroringComplexObjectWithNullObjectForNestedModelIntoComplexModelWillThrowException()
+        {
+            //create a complex object with test data
+            ComplexObject obj = new ComplexObject()
+            {
+                Name = null,
+                NestedObject = null
+            };
+
+            //create a complex model with no data
+            ComplexModel mod = new ComplexModel();
+
+            bool thrown = false;
+            try
+            {
+                //mirror
+                FancyUtil.Mirror(obj, mod);
+            }
+            catch (Exception)
+            {
+                thrown = true;
+            }
+
+            //verify exception thrown
+            Assert.AreEqual(thrown, true);
+        }
+
+        [TestMethod]
+        public void TestMirroringOverlyComplexObjectIntoComplexModelShouldBeEquivalent()
+        {
+            //create an overly complex object with test data
+            OverlyComplexObject obj = new OverlyComplexObject()
+            {
+                NestedComplexObject = new ComplexObject()
+                {
+                    Name = "Deeply Nested",
+                    NestedObject = new SimpleObject()
+                    {
+                        TestString = "Really Deeply Nested",
+                        TestInt = 123,
+                        TestNullableInt = 456
+                    }
+                }
+            };
+
+            //create an empty model
+            ComplexModel mod = new ComplexModel();
+
+            //mirror
+            FancyUtil.Mirror(obj, mod);
+
+            //check equivalence
+            Assert.AreEqual(obj.NestedComplexObject.Name, mod.PoorName);
+            Assert.AreEqual(obj.NestedComplexObject.NestedObject.TestInt, mod.NestedModel.PoorlyNamedInt);
+            Assert.AreEqual(obj.NestedComplexObject.NestedObject.TestNullableInt, mod.NestedModel.PoorlyNamedNullableInt);
+            Assert.AreEqual(obj.NestedComplexObject.NestedObject.TestString, mod.NestedModel.PoorlyNamedString);
         }
     }
 }

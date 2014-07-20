@@ -90,9 +90,6 @@ namespace Testing.Tests
         [TestMethod]
         public void TestMirroringNullIntoSimpleModelShouldThrowExceptionWithPropertiesUnchanged()
         {
-            //create simple object with test data
-            SimpleObject obj = null;
-
             //create a simple model with original data
             SimpleModel mod = new SimpleModel()
             {

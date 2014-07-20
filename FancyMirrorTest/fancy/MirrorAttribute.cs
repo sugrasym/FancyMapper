@@ -16,8 +16,8 @@ namespace FancyMirrorTest.Fancy
     /// More than one mirror can be placed on any property.
     /// </summary>
     /// 
-    [AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
-    public class MirrorAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
+    public class MirrorAttribute : Attribute
     {
         public string Path { get; set; }
 
@@ -35,7 +35,6 @@ namespace FancyMirrorTest.Fancy
         }
 
         /// <summary>
-        /// todo: implement this really cool feature so the documentation isn't lying
         /// Null substitute will be used whenever an incoming or outgoing value is nullable
         /// in one target but not in another. This will be used instead.
         /// 

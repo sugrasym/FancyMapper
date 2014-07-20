@@ -39,7 +39,22 @@ namespace FancyMirrorTest.Fancy
                     var sourceProp = RecursiveRouteMirror(route, 1, 10, source);
                     if (mirror.WalkChildren)
                     {
-                        FancyUtil.Mirror(FancyUtil.GetValueOfProperty(sourceProp.Item1, sourceProp.Item2), FancyUtil.GetValueOfProperty(property, destination));
+                        var s = FancyUtil.GetValueOfProperty(sourceProp.Item1, sourceProp.Item2);
+                        var d = FancyUtil.GetValueOfProperty(property, destination);
+                        if (s == null)
+                        {
+                            /*
+                             * The source object has not been instantiated. This means there's no way we could
+                             * clone the child properties it specifies. Data attributes are too limited for 
+                             * the null substitution value to be used because it can't accept anything that
+                             * could be construed as not being known at compile time (must be constant).
+                             */
+                            throw new NullReferenceException("Unable to map to property " + property.Name + " because it is null in the source");
+                        }
+                        else
+                        {
+                            FancyUtil.Mirror(s, d);
+                        }
                     }
                     else
                     {

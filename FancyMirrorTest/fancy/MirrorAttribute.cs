@@ -35,11 +35,9 @@ namespace FancyMirrorTest.Fancy
         }
 
         /// <summary>
-        /// Null substitute will be used whenever an incoming or outgoing value is nullable
-        /// in one target but not in another. This will be used instead.
-        /// 
-        /// Ex mirroring an int? onto an int would use nullSubstitute for the value if the
-        /// source is null.
+        /// Value to use instead of null when transforming between the source and
+        /// destination property. Must be a primate or generic type that is
+        /// immutable at compile time.
         /// </summary>
         public object NullSubstitute { get; set; }
 

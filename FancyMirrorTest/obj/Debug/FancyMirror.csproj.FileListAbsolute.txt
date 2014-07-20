@@ -3,4 +3,3 @@ I:\Coding\Visual Studio\FancyMirrorTest\FancyMirrorTest\obj\Debug\FancyMirrorTes
 I:\Coding\Visual Studio\FancyMirrorTest\FancyMirrorTest\obj\Debug\FancyMirrorTest.pdb
 I:\Coding\Visual Studio\FancyMirrorTest\FancyMirrorTest\bin\Debug\FancyMirrorTest.exe
 I:\Coding\Visual Studio\FancyMirrorTest\FancyMirrorTest\bin\Debug\FancyMirrorTest.pdb
-I:\Coding\Visual Studio\FancyMirrorTest\FancyMirrorTest\obj\Debug\FancyMirror.csprojResolveAssemblyReference.cache

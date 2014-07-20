@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 using FancyMirrorTest.Fancy;
 using FancyMirrorTest.Models;
 using FancyMirrorTest.Objects;
@@ -162,7 +161,10 @@ namespace Testing.Tests
         }
 
         /// <summary>
-        /// This test actually demonstrates a weakness in this code.
+        /// This tests being able to reflect a model into an object that has both a
+        /// null property and a null nested child object that has child properties that
+        /// need to be written to. It will automatically instantiate any null references
+        /// it encounters traversing the route.
         /// </summary>
         [TestMethod]
         public void TestReflectingComplexModelIntoComplexObjectShouldBeEquivalent()
@@ -192,6 +194,12 @@ namespace Testing.Tests
             Assert.AreEqual(obj.NestedObject.TestString, mod.NestedModel.PoorlyNamedString);
         }
 
+        /// <summary>
+        /// Currently this is setup so that attempting to read the children of a null property
+        /// will thrown a NullPointerException. It is possible to alter this behavior to silently
+        /// ignore or log these so that null child objects are just skipped and as much of the object
+        /// is mirrored into the model as possible.
+        /// </summary>
         [TestMethod]
         public void TestMirroringComplexObjectWithNullObjectForNestedModelIntoComplexModelWillThrowException()
         {
@@ -220,6 +228,10 @@ namespace Testing.Tests
             Assert.AreEqual(thrown, true);
         }
 
+        /// <summary>
+        /// This tests the ability of the router to resolve a route using recursion by
+        /// traversing 3 notes.
+        /// </summary>
         [TestMethod]
         public void TestMirroringOverlyComplexObjectIntoComplexModelShouldBeEquivalent()
         {

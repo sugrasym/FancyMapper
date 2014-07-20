@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Security.Cryptography;
 
 namespace FancyMirrorTest.Fancy
 {
@@ -48,14 +46,14 @@ namespace FancyMirrorTest.Fancy
 
             foreach (var pair in pairs)
             {
-                //try
-                //{
+                try
+                {
                     FancyMirror.MapMirror(pair.Item1, pair.Item2, source, destination);
-                //}
-                /*catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     HandleMirrorExceptions(e);
-                }*/
+                }
             }
         }
 
@@ -63,6 +61,7 @@ namespace FancyMirrorTest.Fancy
         {
             if (e is NullReferenceException)
             {
+                //todo: determine if these should be silently ignored at this stage
                 //not everything is going to be available to copy at all times
                 throw e;
             }
@@ -170,11 +169,8 @@ namespace FancyMirrorTest.Fancy
         /// Sets the value of property to the value of sourceProp in the context of source and destination objects.
         /// 
         /// Differences in nullability (ex int? vs int) can be handled by providing a nullSubstitute value which is
-        /// a place holder for null during this transformation. This makes converting between nullable and non-nullable
-        /// types easy as long as the substitute value is wisely chosen.
-        /// 
-        /// If a nullSubstitute value is provided and the target is not a generic type, then that value is always used
-        /// for null.
+        /// a place holder for null during this transformation. When a null is encountered, null substitute is used. 
+        /// When the null substitute is encountered, null is used.
         /// </summary>
         /// <param name="property"></param>
         /// <param name="source"></param>
@@ -187,43 +183,14 @@ namespace FancyMirrorTest.Fancy
             //perform null substitution
             if (nullSubstitute != null)
             {
-                if (property.GetType().IsGenericType)
+                //substitute the value every time
+                if (srcVal == null)
                 {
-                    /*
-                     * Null substitution is intended to use the nullSubstitute value in place of null
-                     * to resolve differences in the way some pieces of the system store information.
-                     * 
-                     * If the incoming value is null, and the property is not a nullable type, then the
-                     * null substitute value is stored instead.
-                     * 
-                     * If the incoming value is the null substitute value and the property is a
-                     * nullable type, null is used instead.
-                     * 
-                     * The property must be a generic type for this to work.
-                     */
-                    if (srcVal == null)
-                    {
-                        //detect if the destination is a non-nullable type
-                        if (property.PropertyType.GetGenericTypeDefinition() != typeof (Nullable<>))
-                        {
-                            //use null substitute value
-                            srcVal = nullSubstitute;
-                        }
-                    }
-                    else if (srcVal == nullSubstitute)
-                    {
-                        //detect if the destination is a nullable type
-                        if (property.PropertyType.GetGenericTypeDefinition() == typeof (Nullable<>))
-                        {
-                            //use null
-                            srcVal = null;
-                        }
-                    }
-                }
-                else
-                {
-                    //Without a generic type the above does not apply. Just substitute the value every time
                     srcVal = nullSubstitute;
+                }
+                else if (srcVal.Equals(nullSubstitute))
+                {
+                    srcVal = null;
                 }
             }
             //todo: verify type sanity

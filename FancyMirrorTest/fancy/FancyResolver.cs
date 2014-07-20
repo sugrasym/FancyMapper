@@ -22,9 +22,8 @@ namespace FancyMirrorTest.Fancy
                 var t = sourceProp.Item1;
                 var parent = sourceProp.Item2;
                 //It isn't possible to reflect properties into a null object, so it needs to be instantiated
-                var o = Activator.CreateInstance(t.PropertyType); //I hope it has a parameterless constructor
-                var p = parent.GetType().GetProperty(t.Name);
-                p.SetValue(parent, o);
+                CreateInstance(t, parent);
+                //Re-evaluate
                 sp = FancyUtil.GetValueOfProperty(sourceProp.Item1, sourceProp.Item2);
             }
             catch (Exception e)
@@ -32,6 +31,19 @@ namespace FancyMirrorTest.Fancy
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Instantiates the property on the parent object from the provided
+        /// property info type.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="parent"></param>
+        public static void CreateInstance(PropertyInfo t, object parent)
+        {
+            var o = Activator.CreateInstance(t.PropertyType); //I hope it has a parameterless constructor
+            var p = parent.GetType().GetProperty(t.Name);
+            p.SetValue(parent, o);
         }
     }
 }

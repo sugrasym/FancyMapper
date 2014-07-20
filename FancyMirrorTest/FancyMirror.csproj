@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Fancy\FancyMirror.cs" />
     <Compile Include="Fancy\FancyReflect.cs" />
-    <Compile Include="Fancy\FancyResolve.cs" />
+    <Compile Include="Fancy\FancyResolver.cs" />
     <Compile Include="Fancy\FancyUtil.cs" />
     <Compile Include="Fancy\MirrorAttribute.cs" />
     <Compile Include="Objects\OverlyComplexObject.cs" />

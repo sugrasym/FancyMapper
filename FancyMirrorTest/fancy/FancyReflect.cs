@@ -104,8 +104,15 @@ namespace FancyMirrorTest.Fancy
                 }
                 else
                 {
+                    var sp = FancyUtil.GetValueOfProperty(prop, source);
+                    if (sp == null)
+                    {
+                        //attempt to instantiate a new one on the fly so we have somewhere to put these values
+                        bool safe = FancyResolver.ResolveNullDestination(new Tuple<PropertyInfo, object>(prop, source), ref sp);
+                        if (!safe) throw new NullReferenceException("Unable to map to property " + prop.Name + " because it is null in the target");
+                    }
                     //go further down the chain
-                    return RecursiveRouteReflect(route, routeIndex + 1, limit, FancyUtil.GetValueOfProperty(prop, source));
+                    return RecursiveRouteReflect(route, routeIndex + 1, limit, sp);
                 }
             }
         }

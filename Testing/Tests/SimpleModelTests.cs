@@ -60,7 +60,7 @@ namespace Testing.Tests
         /// the SimpleModel after this transformation.
         /// </summary>
         [TestMethod]
-        public void TestReflectingSimpleModelIntoComplexObjectShouldBeEquivalent()
+        public void TestReflectingSimpleModelIntoSimpleObjectShouldBeEquivalent()
         {
             //create a simple object with no data
             SimpleObject obj = new SimpleObject();
@@ -124,7 +124,7 @@ namespace Testing.Tests
         /// into ones that the model can tolerate.
         /// </summary>
         [TestMethod]
-        public void TestMirroringModelWithNullableIntIntoNonNullibleModelShouldUseNullSubstituteValue()
+        public void TestMirroringObjectWithNullableIntIntoNonNullibleModelShouldUseNullSubstituteValue()
         {
             //create a simple object with nulls
             SimpleObjectWithNullables obj = new SimpleObjectWithNullables()
@@ -143,7 +143,35 @@ namespace Testing.Tests
             //verify expected null substitutes
             Assert.AreEqual("Null", mod.PoorlyNamedString);
             Assert.AreEqual(5, mod.PoorlyNamedInt);
-            Assert.AreEqual(null, mod.PoorlyNamedNullableInt); //this one can be null because it is nullable in the destination
+            Assert.AreEqual(7, mod.PoorlyNamedNullableInt);
+        }
+
+        [TestMethod]
+        public void TestReflectingModelWithNullableIntIntoNullibleModelShouldReplaceNullSubstituteValuesWithNull()
+        {
+            //create a test object with some non-null data so we can verify its being written to
+            SimpleObjectWithNullables obj = new SimpleObjectWithNullables()
+            {
+                TestString = "should be overwritten",
+                AValue = 53,
+                BValue = 99
+            };
+
+            //create a model with test data equal to its null substitution values
+            SimpleModel mod = new SimpleModel()
+            {
+                PoorlyNamedString = "Null",
+                PoorlyNamedNullableInt = 7,
+                PoorlyNamedInt = 5
+            };
+
+            //mirror
+            FancyUtil.Reflect(mod, obj);
+
+            //verify expected null substitutes
+            Assert.AreEqual(null, obj.TestString);
+            Assert.AreEqual(null, obj.AValue);
+            Assert.AreEqual(null, obj.BValue); //this one can be null because it is nullable in the destination
         }
     }
 }

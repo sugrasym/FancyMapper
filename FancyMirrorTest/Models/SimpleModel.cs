@@ -24,7 +24,7 @@ namespace FancyMirrorTest.Models
         public int PoorlyNamedInt { get; set; }
 
         [Mirror("SimpleObject.TestNullableInt")]
-        [Mirror("SimpleObjectWithNullables.BValue")]
+        [Mirror("SimpleObjectWithNullables.BValue", NullSubstitute = 7)]
         public int? PoorlyNamedNullableInt { get; set; }
 
         public new string ToString()

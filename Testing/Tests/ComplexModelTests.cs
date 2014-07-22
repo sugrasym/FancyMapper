@@ -209,15 +209,17 @@ namespace Testing.Tests
         }
 
         /// <summary>
-        /// Currently this is setup so that attempting to read the children of a null property
-        /// will thrown a NullPointerException. It is possible to alter this behavior to silently
-        /// ignore or log these so that null child objects are just skipped and as much of the object
-        /// is mirrored into the model as possible.
+        /// --Currently this is setup so that attempting to read the children of a null property
+        /// --will thrown a NullPointerException. It is possible to alter this behavior to silently
+        /// --ignore or log these so that null child objects are just skipped and as much of the object
+        /// --is mirrored into the model as possible.
+        /// 
+        /// NOPE: As of now this behavior is deprecated and this test is invalid.
         /// </summary>
         [TestMethod]
         public void TestMirroringComplexObjectWithNullObjectForNestedModelIntoComplexModelWillThrowException()
         {
-            //create a complex object with test data
+            /*//create a complex object with test data
             ComplexObject obj = new ComplexObject()
             {
                 Name = null,
@@ -239,7 +241,7 @@ namespace Testing.Tests
             }
 
             //verify exception thrown
-            Assert.AreEqual(thrown, true);
+            Assert.AreEqual(thrown, true);*/
         }
 
         /// <summary>

@@ -75,9 +75,9 @@ namespace FancyMirrorTest.Fancy
         {
             if (e is NullReferenceException)
             {
-                //todo: determine if these should be silently ignored at this stage
+                //todo: determine if these should be silently ignored at this stage - YEP
                 //not everything is going to be available to copy at all times
-                throw e;
+                //throw e;
             }
             else
             {

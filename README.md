@@ -5,7 +5,7 @@ Data annotation based object mapper for C#
 
 WARNING: This code is extremely experimental. I am in no way liable for any damage it may cause.
 
-FancyMapper is a stupidly complex piece of code that solves a pretty boring problem.
+FancyMapper maps scalars in a classy, sophisticated way. Instead of doing something like 
 
 objA.a = objB.a
 objA.b = objB.b
@@ -21,8 +21,7 @@ method call. This means that these relationships are defined in one place: the r
 
 Anything can be a model class. There are no special interfaces, any C# object you have sources for will due.
 
-And then all you have to do is use Reflect() or Mirror() to transfer the values on any instance of that model class into or
-out of any object you've defined a route for. Isn't that great?
+And then all you have to do is use Reflect() or Mirror() to transfer the values on any instance of that model class into or out of any object you've defined a route for. Isn't that great?
 
 So instead of doing mapping line by line, you can define reusable routes with Data Annotations like this:
 

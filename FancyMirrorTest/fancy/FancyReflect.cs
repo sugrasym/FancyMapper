@@ -16,9 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FancyMirrorTest.Fancy
 {
@@ -32,14 +29,16 @@ namespace FancyMirrorTest.Fancy
         /// <param name="property"></param>
         /// <param name="source"></param>
         /// <param name="destination"></param>
+        /// <param name="proxy">Only set to true if reflecting into an object with a proxied type.</param>
         /// <returns></returns>
-        public static void MapReflect(MirrorAttribute mirror, PropertyInfo property, object source, object destination)
+        public static void MapReflect(MirrorAttribute mirror, PropertyInfo property, object source, object destination, bool proxy = false)
         {
             string[] route = mirror.Path.Split('.');
             //the first element is always the class
             string className = mirror.Class;
+            string destTypeName = proxy ? FancyUtil.AttemptToDeproxyName(destination) : destination.GetType().Name;
             //verify the type of the target object
-            if (destination.GetType().Name == className)
+            if (destTypeName == className)
             {
                 int index = route.Length > 1 ? 1 : 0;
                 //must be solved using recursion

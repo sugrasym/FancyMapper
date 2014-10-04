@@ -22,7 +22,6 @@ namespace FancyMirrorTest.Fancy
 
     public static class FancyUtil
     {
-
         /// <summary>
         /// Using custom attributes, maps the source object's values
         /// onto the destination object. The destination object
@@ -30,17 +29,25 @@ namespace FancyMirrorTest.Fancy
         /// </summary>
         /// <param name="source"></param>
         /// <param name="destination"></param>
-        public static void Mirror(object source, object destination)
+        /// <param name="proxy">Useful for mirroring from entity framework objects when set to true, EF generates
+        /// dynamic proxies for all entities by default which mean the underlying type is obscured. When true,
+        /// the last part of the object class name will be removed after _ so EntityObject_5436ty5r2354 becomes
+        /// EntityObject. Be careful if you are using classes with names like "my_object" because if they are
+        /// not actually being proxied it will become simply "my".</param>
+        public static void Mirror(object source, object destination, bool proxy = false)
         {
             var pairs = new List<Tuple<MirrorAttribute, PropertyInfo>>();
             //find mirror attributes on the destination object
             List<PropertyInfo> destMirrorProps = GetPropertiesWithMirrors(destination).ToList();
+
+            string srcTypeName = proxy ? AttemptToDeproxyName(source) : source.GetType().Name;
+
             foreach (var prop in destMirrorProps)
             {
                 try
                 {
-                    MirrorAttribute mirror = ExtractMirrorsFromProperty(prop).SingleOrDefault(x => x.Class == source.GetType().Name);
-                    
+                    MirrorAttribute mirror = ExtractMirrorsFromProperty(prop).SingleOrDefault(x => x.Class == srcTypeName);
+
                     if (mirror == null)
                     {
                         //this property doesn't have a mirror to this object
@@ -62,7 +69,7 @@ namespace FancyMirrorTest.Fancy
             {
                 try
                 {
-                    FancyMirror.MapMirror(pair.Item1, pair.Item2, source, destination);
+                    FancyMirror.MapMirror(pair.Item1, pair.Item2, source, destination, proxy: proxy);
                 }
                 catch (Exception e)
                 {
@@ -92,17 +99,24 @@ namespace FancyMirrorTest.Fancy
         /// </summary>
         /// <param name="source"></param>
         /// <param name="destination"></param>
-        public static void Reflect(object source, object destination)
+        /// <param name="proxy">Useful for reflecting to entity framework objects when set to true, EF generates
+        /// dynamic proxies for all entities by default which mean the underlying type is obscured. When true,
+        /// the last part of the object class name will be removed after _ so EntityObject_5436ty5r2354 becomes
+        /// EntityObject. Be careful if you are using classes with names like "my_object" because if they are
+        /// not actually being proxied it will become simply "my"</param>
+        public static void Reflect(object source, object destination, bool proxy = false)
         {
             var pairs = new List<Tuple<MirrorAttribute, PropertyInfo>>();
             //find mirror attributes on the source object
             List<PropertyInfo> sourceMirrorProps = GetPropertiesWithMirrors(source).ToList();
+
+            var destTypeName = proxy ? AttemptToDeproxyName(destination) : destination.GetType().Name;
             foreach (var prop in sourceMirrorProps)
             {
                 try
                 {
                     MirrorAttribute mirror =
-                        ExtractMirrorsFromProperty(prop).SingleOrDefault(x => x.Class == destination.GetType().Name);
+                        ExtractMirrorsFromProperty(prop).SingleOrDefault(x => x.Class == destTypeName);
 
                     if (mirror == null)
                     {
@@ -124,7 +138,7 @@ namespace FancyMirrorTest.Fancy
 
             foreach (var pair in pairs)
             {
-                FancyReflect.MapReflect(pair.Item1, pair.Item2, source, destination);
+                FancyReflect.MapReflect(pair.Item1, pair.Item2, source, destination, proxy: proxy);
             }
         }
 
@@ -147,6 +161,20 @@ namespace FancyMirrorTest.Fancy
         public static IEnumerable<PropertyInfo> GetPropertiesWithMirrors(object o)
         {
             return o.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(MirrorAttribute))).ToList();
+        }
+
+        /// <summary>
+        /// Attempts to use the rule that a proxied class has a name in the format of
+        /// REALTYPE_garbage where we want REALTYPE.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static string AttemptToDeproxyName(object source)
+        {
+            string rawName = source.GetType().Name;
+            int lastScore = rawName.LastIndexOf("_", System.StringComparison.Ordinal);
+            string shortName = rawName.Substring(0, lastScore);
+            return shortName;
         }
 
         /// <summary>

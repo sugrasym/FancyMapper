@@ -13,8 +13,7 @@ obcA.c = objB.c
 ...
 repeat until bored
 
-This relationship may be repeated in many places in the application. There are other mappers that setup maps durring run
-time to map your properties, but things like objA.a = objB.b are known at compile time. So are FancyMapper's routes!
+This relationship may be repeated in many places in the application.
 
 FancyMapper lets you define these relationships as data annotations which are used to map these properties with a single
 method call. This means that these relationships are defined in one place: the relevant model class you use.
@@ -53,3 +52,10 @@ public string ReallyWantThisString { get; set; }
 Still don't get it? You can read the unit tests. I think this is pretty cool.
 
 But it's also brand new, incomplete, and written by someone with a strong Java background. You have been warned!
+
+As of October 2014, FancyMapper now provides more support for Entity framework. If you are working with proxied EF
+classes, you can use the new proxy parameter to indicate you are comparing a proxied EF type like this:
+
+FancyUtil.mirror(object, model, proxy: true)
+
+Which will allow proper mapping onto EF classes that represent objects you retrieved from your database.

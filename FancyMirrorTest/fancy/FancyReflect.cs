@@ -29,14 +29,12 @@ namespace FancyMirrorTest.Fancy
         /// <param name="property"></param>
         /// <param name="source"></param>
         /// <param name="destination"></param>
-        /// <param name="proxy">Only set to true if reflecting into an object with a proxied type.</param>
-        /// <returns></returns>
-        public static void MapReflect(MirrorAttribute mirror, PropertyInfo property, object source, object destination, bool proxy = false)
+        public static void MapReflect(MirrorAttribute mirror, PropertyInfo property, object source, object destination)
         {
             string[] route = mirror.Path.Split('.');
             //the first element is always the class
             string className = mirror.Class;
-            string destTypeName = proxy ? FancyUtil.AttemptToDeproxyName(destination) : destination.GetType().Name;
+            string destTypeName = FancyUtil.AttemptToDeproxyName(destination);
             //verify the type of the target object
             if (destTypeName == className)
             {

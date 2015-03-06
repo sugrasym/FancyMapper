@@ -29,18 +29,13 @@ namespace FancyMirrorTest.Fancy
         /// </summary>
         /// <param name="source"></param>
         /// <param name="destination"></param>
-        /// <param name="proxy">Useful for mirroring from entity framework objects when set to true, EF generates
-        /// dynamic proxies for all entities by default which mean the underlying type is obscured. When true,
-        /// the last part of the object class name will be removed after _ so EntityObject_5436ty5r2354 becomes
-        /// EntityObject. Be careful if you are using classes with names like "my_object" because if they are
-        /// not actually being proxied it will become simply "my".</param>
-        public static void Mirror(object source, object destination, bool proxy = false)
+        public static void Mirror(object source, object destination)
         {
             var pairs = new List<Tuple<MirrorAttribute, PropertyInfo>>();
             //find mirror attributes on the destination object
             List<PropertyInfo> destMirrorProps = GetPropertiesWithMirrors(destination).ToList();
 
-            string srcTypeName = proxy ? AttemptToDeproxyName(source) : source.GetType().Name;
+            string srcTypeName = AttemptToDeproxyName(source);
 
             foreach (var prop in destMirrorProps)
             {
@@ -51,7 +46,7 @@ namespace FancyMirrorTest.Fancy
                     if (mirror == null)
                     {
                         //this property doesn't have a mirror to this object
-                        Console.WriteLine("Mirror was unable to map the property "+prop.Name+" because it has no route for the source class "+source.GetType().Name);
+                        Console.WriteLine("Mirror was unable to map the property " + prop.Name + " because it has no route for the source class " + source.GetType().Name);
                     }
                     else
                     {
@@ -69,7 +64,7 @@ namespace FancyMirrorTest.Fancy
             {
                 try
                 {
-                    FancyMirror.MapMirror(pair.Item1, pair.Item2, source, destination, proxy: proxy);
+                    FancyMirror.MapMirror(pair.Item1, pair.Item2, source, destination);
                 }
                 catch (Exception e)
                 {
@@ -99,18 +94,13 @@ namespace FancyMirrorTest.Fancy
         /// </summary>
         /// <param name="source"></param>
         /// <param name="destination"></param>
-        /// <param name="proxy">Useful for reflecting to entity framework objects when set to true, EF generates
-        /// dynamic proxies for all entities by default which mean the underlying type is obscured. When true,
-        /// the last part of the object class name will be removed after _ so EntityObject_5436ty5r2354 becomes
-        /// EntityObject. Be careful if you are using classes with names like "my_object" because if they are
-        /// not actually being proxied it will become simply "my"</param>
-        public static void Reflect(object source, object destination, bool proxy = false)
+        public static void Reflect(object source, object destination)
         {
             var pairs = new List<Tuple<MirrorAttribute, PropertyInfo>>();
             //find mirror attributes on the source object
             List<PropertyInfo> sourceMirrorProps = GetPropertiesWithMirrors(source).ToList();
 
-            var destTypeName = proxy ? AttemptToDeproxyName(destination) : destination.GetType().Name;
+            var destTypeName = AttemptToDeproxyName(destination);
             foreach (var prop in sourceMirrorProps)
             {
                 try
@@ -138,7 +128,7 @@ namespace FancyMirrorTest.Fancy
 
             foreach (var pair in pairs)
             {
-                FancyReflect.MapReflect(pair.Item1, pair.Item2, source, destination, proxy: proxy);
+                FancyReflect.MapReflect(pair.Item1, pair.Item2, source, destination);
             }
         }
 
@@ -171,10 +161,13 @@ namespace FancyMirrorTest.Fancy
         /// <returns></returns>
         public static string AttemptToDeproxyName(object source)
         {
+            var entityType = source.GetType();
             string rawName = source.GetType().Name;
-            int lastScore = rawName.LastIndexOf("_", System.StringComparison.Ordinal);
-            string shortName = rawName.Substring(0, lastScore);
-            return shortName;
+            if (entityType.Namespace != null && entityType.Namespace.Contains("System.Data.Entity.DynamicProxies"))
+            {
+                return entityType.BaseType.Name;
+            }
+            return rawName;
         }
 
         /// <summary>

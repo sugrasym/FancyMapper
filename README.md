@@ -53,9 +53,4 @@ Still don't get it? You can read the unit tests. I think this is pretty cool.
 
 But it's also brand new, incomplete, and written by someone with a strong Java background. You have been warned!
 
-As of October 2014, FancyMapper now provides more support for Entity framework. If you are working with proxied EF
-classes, you can use the new proxy parameter to indicate you are comparing a proxied EF type like this:
-
-FancyUtil.mirror(object, model, proxy: true)
-
-Which will allow proper mapping onto EF classes that represent objects you retrieved from your database.
+As of March 2015, FancyMapper can handle EF objects and their proxy names. Before you had to manually define if a mapping contained EF objects.

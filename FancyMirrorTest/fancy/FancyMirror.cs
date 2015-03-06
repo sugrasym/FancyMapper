@@ -29,14 +29,12 @@ namespace FancyMirrorTest.Fancy
         /// <param name="property"></param>
         /// <param name="source"></param>
         /// <param name="destination"></param>
-        /// <param name="proxy">Only set to true if you are mirroring from a class with a proxied type</param>
-        /// <returns></returns>
-        public static void MapMirror(MirrorAttribute mirror, PropertyInfo property, object source, object destination, bool proxy = false)
+        public static void MapMirror(MirrorAttribute mirror, PropertyInfo property, object source, object destination)
         {
             string[] route = mirror.Path.Split('.');
             //the first element is always the class
             string className = mirror.Class;
-            string srcTypeName = proxy ? FancyUtil.AttemptToDeproxyName(source): source.GetType().Name;
+            string srcTypeName = FancyUtil.AttemptToDeproxyName(source);
             //verify the type of the target object
             if (srcTypeName == className)
             {
@@ -110,7 +108,7 @@ namespace FancyMirrorTest.Fancy
             if (prop == null)
             {
                 throw new Exception(
-                    "The route provided by this MirrorAttribute is not a valid path to the target property");
+                    string.Format("The route '{0}' provided by this MirrorAttribute is not a valid path to the target property", string.Join(".", route)));
             }
             else
             {

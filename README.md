@@ -45,7 +45,7 @@ FancyUtil.Reflect(object model, object dest);
 
 which goes the opposite direction from model -> object.
 
-In Fancy, *"model" means whatever class has the Mirror attributes*. Only the model needs the attributes and it will work in both cases. You can have as many Mirror attributes on a property in a model as you want. Of course, there's a lot more power here than that.
+In Fancy, **"model" means whatever class has the Mirror attributes**. Only the model needs the attributes and it will work in both cases. You can have as many Mirror attributes on a property in a model as you want. Of course, there's a lot more power here than that.
 
 Features
 ==============================================================================================================================
@@ -62,7 +62,7 @@ Documentation
 ==============================================================================================================================
 The unit tests provided should get you started as they provide examples of Fancy's features. I agree there needs to be a tutorial, but this project isn't quite there yet.
 
-To see models decorated with Mirror attributes, just check *Testing\FancyMapper\Models* for examples. The classes the Mirror attributes reference are in *Testing\FancyMapper\Objects*.
+To see models decorated with Mirror attributes, just check **Testing\FancyMapper\Models** for examples. The classes the Mirror attributes reference are in **Testing\FancyMapper\Objects**.
 
 Then take a look at the unit tests which demonstrate the various features of the library. And if you decide to modify something, the extensive unit test collection in this solution should leave you confident you haven't broken anything!
 

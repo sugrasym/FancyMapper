@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2014 Nathan Wiehoff
+ * Copyright (C) 2015 Nathan Wiehoff, Geoffrey Hibbert
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -12,31 +12,16 @@
  *   IN THE SOFTWARE.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FancyMirrorTest.Objects
+namespace Testing.FancyMapper.Objects
 {
-    /// <summary>
-    /// This is a test object designed to test the ability for this to handle
-    /// mapping values. It intentionally does not implement any custom data
-    /// attributes because Entity framework won't and we'll need to be able
-    /// to map to and from those objects.
-    /// </summary>
-    public class SimpleObject
+    public class ComplexObject
     {
-        public string TestString { get; set; }
-        public int TestInt { get; set; }
-        public int? TestNullableInt { get; set; }
-
-        public string SomeString { get; set; }
+        public string Name { get; set;}
+        public SimpleObject NestedObject { get; set; }
 
         public new string ToString()
         {
-            return "TestString: " + TestString + ", TestInt: " + TestInt + ", TestNullableInt: " + TestNullableInt;
+            return "Name: " + Name + " Nested Object: (" + NestedObject.ToString()+")";
         }
     }
 }

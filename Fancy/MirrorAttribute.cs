@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2014 Nathan Wiehoff
+ * Copyright (C) 2015 Nathan Wiehoff, Geoffrey Hibbert
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -14,7 +14,7 @@
 
 using System;
 
-namespace FancyMirrorTest.Fancy
+namespace Fancy
 {
     /// <summary>
     /// A mirror attribute defines the location of a target value in another class as an
@@ -52,19 +52,16 @@ namespace FancyMirrorTest.Fancy
         public object NullSubstitute { get; set; }
 
         /// <summary>
-        /// When true, this mirror will be evaluated in its own context and any child
-        /// properties it contains will be evaluated against the object in its path.
-        /// 
-        /// Use this if you are nesting a model inside a model and the nested model
-        /// has mirror attributes on its own properties.
+        /// When true, this mirror will be applied to the child
+        /// elements of the property.
         /// </summary>
-        public bool WalkChildren { get; set; }
+        public bool Deep { get; set; }
 
         public MirrorAttribute(String path)
         {
             Path = path;
             NullSubstitute = null;
-            WalkChildren = false;
+            Deep = false;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2014 Nathan Wiehoff
+ * Copyright (C) 2015 Nathan Wiehoff, Geoffrey Hibbert
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace FancyMirrorTest.Fancy
+namespace Fancy
 {
 
     public static class FancyUtil
@@ -165,7 +165,7 @@ namespace FancyMirrorTest.Fancy
             string rawName = source.GetType().Name;
             if (entityType.Namespace != null && entityType.Namespace.Contains("System.Data.Entity.DynamicProxies"))
             {
-                return entityType.BaseType.Name;
+                if (entityType.BaseType != null) return entityType.BaseType.Name;
             }
             return rawName;
         }

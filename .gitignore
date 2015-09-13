@@ -29,3 +29,10 @@
 /Testing/obj/Debug/Testing.dll
 /Testing/obj/Debug/Testing.pdb
 /.vs/FancyMapper/v14/*.suo
+/Fancy/*.user
+/Testing/*.user
+/Fancy/bin
+/Testing/bin
+/TestResults
+/Fancy/obj
+/Testing/obj

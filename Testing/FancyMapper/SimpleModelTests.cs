@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2014 Nathan Wiehoff
+ * Copyright (C) 2015 Nathan Wiehoff, Geoffrey Hibbert
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -13,12 +13,12 @@
  */
 
 using System;
-using FancyMirrorTest.Fancy;
-using FancyMirrorTest.Models;
-using FancyMirrorTest.Objects;
+using Fancy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Testing.FancyMapper.Models;
+using Testing.FancyMapper.Objects;
 
-namespace Testing.Tests
+namespace Testing.FancyMapper
 {
     /// <summary>
     /// A set of unit tests to test the SimpleModel

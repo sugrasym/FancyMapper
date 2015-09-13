@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2014 Nathan Wiehoff
+ * Copyright (C) 2015 Nathan Wiehoff, Geoffrey Hibbert
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -13,9 +13,10 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
-namespace FancyMirrorTest.Fancy
+namespace Fancy
 {
     /// <summary>
     /// Resolves object reference issues
@@ -58,6 +59,32 @@ namespace FancyMirrorTest.Fancy
             var o = Activator.CreateInstance(t.PropertyType); //I hope it has a parameterless constructor
             var p = parent.GetType().GetProperty(t.Name);
             p.SetValue(parent, o);
+        }
+
+        /// <summary>
+        /// Creates a new instance of the provided type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object CreateInstance(Type type)
+        {
+            return Activator.CreateInstance(type);
+        }
+
+        /// <summary>
+        /// Instantiates the property on the parent object from the provided
+        /// property info type as an IEnumerable.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="parent"></param>
+        public static void CreateListInstance(PropertyInfo t, object parent)
+        {
+            var p = parent.GetType().GetProperty(t.Name);
+            var listType = typeof(List<>);
+            var genericArgs = p.PropertyType.GetGenericArguments();
+            var concreteType = listType.MakeGenericType(genericArgs);
+            var newList = Activator.CreateInstance(concreteType);
+            p.SetValue(parent, newList);
         }
     }
 }

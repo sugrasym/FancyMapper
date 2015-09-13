@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2014 Nathan Wiehoff
+ * Copyright (C) 2015 Nathan Wiehoff, Geoffrey Hibbert
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -12,16 +12,19 @@
  *   IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Fancy;
 
-namespace FancyMirrorTest.Objects
+namespace Testing.FancyMapper.Models
 {
-    public class OverlyComplexObject
+    public class ListModel
     {
-        public ComplexObject NestedComplexObject { get; set; }
+        [Mirror("ListOfSimpleObject.Objects", Deep = true)]
+        public List<SimpleModel> Models { get; set; }
+
+        public ListModel()
+        {
+            Models = new List<SimpleModel>();
+        }
     }
 }

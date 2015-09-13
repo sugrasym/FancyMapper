@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2014 Nathan Wiehoff
+ * Copyright (C) 2015 Nathan Wiehoff, Geoffrey Hibbert
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -13,11 +13,12 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace FancyMirrorTest.Fancy
+namespace Fancy
 {
     public static class FancyReflect
     {
@@ -26,10 +27,10 @@ namespace FancyMirrorTest.Fancy
         /// using the path in the mirror.
         /// </summary>
         /// <param name="mirror"></param>
-        /// <param name="property"></param>
+        /// <param name="sourceProp"></param>
         /// <param name="source"></param>
         /// <param name="destination"></param>
-        public static void MapReflect(MirrorAttribute mirror, PropertyInfo property, object source, object destination)
+        public static void MapReflect(MirrorAttribute mirror, PropertyInfo sourceProp, object source, object destination)
         {
             string[] route = mirror.Path.Split('.');
             //the first element is always the class
@@ -43,27 +44,57 @@ namespace FancyMirrorTest.Fancy
                 if (route.Length == 1)
                 {
                     //re-evaluate in the context of the child
-                    var lp = FancyUtil.GetValueOfProperty(property, source);
+                    var lp = FancyUtil.GetValueOfProperty(sourceProp, source);
                     FancyUtil.Reflect(lp, destination);
                 }
                 else if (route.Length > 0)
                 {
-                    var sourceProp = RecursiveRouteReflect(route, index, 10, destination);
-                    if (mirror.WalkChildren)
+                    var destProp = RecursiveRouteReflect(route, index, 10, destination);
+                    if (mirror.Deep)
                     {
-                        var lp = FancyUtil.GetValueOfProperty(property, source);
-                        var sp = FancyUtil.GetValueOfProperty(sourceProp.Item1, sourceProp.Item2);
-                        if (sp == null)
+                        var s = FancyUtil.GetValueOfProperty(sourceProp, source);
+                        var d = FancyUtil.GetValueOfProperty(destProp.Item1, destProp.Item2);
+                        if (d == null)
                         {
                             //attempt to instantiate a new one on the fly so we have somewhere to put these values
-                            bool safe = FancyResolver.ResolveNullDestination(sourceProp, ref sp);
-                            if (!safe) throw new NullReferenceException("Unable to map to property " + sourceProp.Item1.Name + " because it is null in the target");
+                            bool safe = FancyResolver.ResolveNullDestination(destProp, ref d);
+                            if (!safe)
+                                throw new NullReferenceException("Unable to map to property " + destProp.Item1.Name +
+                                                                 " because it is null in the target");
                         }
-                        FancyUtil.Reflect(lp, sp);
+                        //determine if this property is an IEnumerable or a single model
+                        if (sourceProp.PropertyType.GetInterfaces().Contains(typeof (IEnumerable)))
+                        {
+                            //make sure the target is an IEnumerable as well
+                            if (!destProp.Item1.PropertyType.GetInterfaces().Contains(typeof (IEnumerable)))
+                                throw new Exception(
+                                    "Target property must be an IEnumerable if deep is true and the source is an IEnumerable");
+                            //determine the type of the target IEnumerable
+                            var destType = d.GetType().GetGenericArguments()[0];
+                            //instantiate the target property
+                            FancyResolver.CreateListInstance(destProp.Item1, destination);
+                            //map each element to the list's model
+                            foreach (var element in s as IEnumerable)
+                            {
+                                //create the model
+                                var t = FancyResolver.CreateInstance(destType);
+                                FancyUtil.Reflect(element, t);
+                                //add it to the target list
+                                var o = FancyUtil.GetValueOfProperty(destProp.Item1, destination);
+                                MethodInfo addMethod = o.GetType()
+                                    .GetMethods().FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Count() == 1);
+                                if (addMethod != null) addMethod.Invoke(o, new object[] {t});
+                            }
+                        }
+                        else
+                        {
+                            FancyUtil.Reflect(s, d);
+                        }
                     }
                     else
                     {
-                        FancyUtil.SetValueOfProperty(sourceProp.Item1, source, sourceProp.Item2, property, mirror.NullSubstitute);
+                        FancyUtil.SetValueOfProperty(destProp.Item1, source, destProp.Item2, sourceProp,
+                            mirror.NullSubstitute);
                     }
                 }
                 else

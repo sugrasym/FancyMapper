@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2014 Nathan Wiehoff
+ * Copyright (C) 2015 Nathan Wiehoff, Geoffrey Hibbert
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -12,23 +12,17 @@
  *   IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FancyMirrorTest.Objects
+namespace Testing.FancyMapper.Objects
 {
-    public class SimpleObjectWithNullables
+    public class ListOfSimpleObject
     {
-        public string TestString { get; set; }
-        public int? AValue { get; set; }
-        public int? BValue { get; set; }
+        public List<SimpleObject> Objects { get; set; }
 
-        public new string ToString()
+        public ListOfSimpleObject()
         {
-            return "TestString: " + TestString + ", AValue: " + AValue + ", BValue: " + BValue;
+            Objects = new List<SimpleObject>();
         }
     }
 }

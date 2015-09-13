@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2014 Nathan Wiehoff
+ * Copyright (C) 2015 Nathan Wiehoff, Geoffrey Hibbert
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -12,13 +12,12 @@
  *   IN THE SOFTWARE.
  */
 
-using System;
-using FancyMirrorTest.Fancy;
-using FancyMirrorTest.Models;
-using FancyMirrorTest.Objects;
+using Fancy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Testing.FancyMapper.Models;
+using Testing.FancyMapper.Objects;
 
-namespace Testing.Tests
+namespace Testing.FancyMapper
 {
     /// <summary>
     /// A set of unit tests to test the ComplexModel
@@ -142,7 +141,7 @@ namespace Testing.Tests
         /// the model should be equivalent to those in the object after this
         /// transformation.
         /// 
-        /// Note that the routing for the nested model must use the WalkChildren flag
+        /// Note that the routing for the nested model must use the Deep flag
         /// because it needs to be re-evaluated against its target to determine what
         /// its properties mirror against.
         /// </summary>
@@ -277,6 +276,42 @@ namespace Testing.Tests
             Assert.AreEqual(obj.NestedComplexObject.NestedObject.TestInt, mod.NestedModel.PoorlyNamedInt);
             Assert.AreEqual(obj.NestedComplexObject.NestedObject.TestNullableInt, mod.NestedModel.PoorlyNamedNullableInt);
             Assert.AreEqual(obj.NestedComplexObject.NestedObject.TestString, mod.NestedModel.PoorlyNamedString);
+        }
+
+        /// <summary>
+        /// Tests mirroring a complex object into a complex model. Unlike in the other test, the
+        /// complex model has a null nested model. This should be instantiated automatically to
+        /// inflate the object.
+        /// </summary>
+        [TestMethod]
+        public void TestMirroringComplexObjectIntoComplexModelWithNullDestinationShouldBeEquivalent()
+        {
+            //create a complex object with test data
+            ComplexObject obj = new ComplexObject()
+            {
+                Name = "A complex object",
+                NestedObject = new SimpleObject()
+                {
+                    TestInt = 500,
+                    TestNullableInt = 300,
+                    TestString = "abcdef"
+                }
+            };
+
+            //create a complex model with no data
+            ComplexModel mod = new ComplexModel();
+
+            //set properties to null on the model
+            mod.NestedModel = null;
+
+            //mirror
+            FancyUtil.Mirror(obj, mod);
+
+            //verify equivalency
+            Assert.AreEqual(obj.Name, mod.PoorName);
+            Assert.AreEqual(obj.NestedObject.TestInt, mod.NestedModel.PoorlyNamedInt);
+            Assert.AreEqual(obj.NestedObject.TestNullableInt, mod.NestedModel.PoorlyNamedNullableInt);
+            Assert.AreEqual(obj.NestedObject.TestString, mod.NestedModel.PoorlyNamedString);
         }
     }
 }

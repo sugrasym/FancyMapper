@@ -23,7 +23,9 @@ public string City { get; set; }
 </code>
 </pre>
 
-Instructs Fancy that if you are mapping this model to or from an object of the "Address" class that you want the model's City property to equal the City property on the Address (or the other way around). Notice the route in the annotation "Address.City" which is designed to look like how you'd access that property if you wrote more traditional code. You can go quite deep (up to 10 levels), so you could also target Address.State.Name, or Address.State.Capital.City (for example).
+Instructs Fancy that if you are mapping this model to or from an object of the "Address" class that you want the model's City property to equal the City property on the Address (or the other way around).
+
+Notice the route in the annotation "Address.City" which is designed to look like how you'd access that property if you wrote more traditional code. You can go quite deep (up to 10 levels), so you could also target Address.State.Name, or Address.State.Capital.City (for example).
 
 The actual mapping is done with 1 of 2 methods.
 
@@ -66,4 +68,4 @@ Then take a look at the unit tests which demonstrate the various features of the
 
 Installation
 ==============================================================================================================================
-It's just a class library, so you can either build the library and add the DLL as a reference, or you could include the entire Fancy project (in which case you probably want to include the unit tests too, but you don't have to) in your solution and add it as a reference in your other projects.
+It's just a class library, so you can both build the library and add the DLL as a reference, or you could include the entire Fancy project (in which case you probably want to include the unit tests too, but you don't have to) in your solution and add it as a reference in your other projects.

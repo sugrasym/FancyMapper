@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>SUGRA-SYM LLC</authors>
+    <owners>SUGRA-SYM LLC</owners>
+    <licenseUrl>https://github.com/sugrasym/FancyMapper/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/sugrasym/FancyMapper</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Data annotation based object mapper for C#</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags></tags>
+  </metadata>
+</package>

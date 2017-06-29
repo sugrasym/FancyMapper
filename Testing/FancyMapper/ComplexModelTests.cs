@@ -1,18 +1,4 @@
-﻿/*
- * Copyright (C) 2015 Nathan Wiehoff, Geoffrey Hibbert
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
- * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
- * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- *   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
- *   IN THE SOFTWARE.
- */
-
-using Fancy;
+﻿using Fancy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing.FancyMapper.Models;
 using Testing.FancyMapper.Objects;
@@ -20,30 +6,29 @@ using Testing.FancyMapper.Objects;
 namespace Testing.FancyMapper
 {
     /// <summary>
-    /// A set of unit tests to test the ComplexModel
-    /// 
-    /// ComplexModel has data annotations defined in its class that will
-    /// instruct on how to mirror it.
+    ///     A set of unit tests to test the ComplexModel
+    ///     ComplexModel has data annotations defined in its class that will
+    ///     instruct on how to mirror it.
     /// </summary>
     [TestClass]
     public class ComplexModelTests
     {
         /// <summary>
-        /// Tests mirroring a single string property from a simple object into
-        /// a single string property on a complex model. These strings should
-        /// be equivalent after this transformation.
+        ///     Tests mirroring a single string property from a simple object into
+        ///     a single string property on a complex model. These strings should
+        ///     be equivalent after this transformation.
         /// </summary>
         [TestMethod]
         public void TestMirroringSinglePropertyFromSimpleObjectIntoComplexModelShouldBeEquivalent()
         {
             //create a simple object with test data
-            SimpleObject obj = new SimpleObject()
+            var obj = new SimpleObject
             {
                 SomeString = "I'm some other string!"
             };
 
             //create a complex model with no data
-            ComplexModel mod = new ComplexModel();
+            var mod = new ComplexModel();
 
             //mirror
             FancyUtil.Mirror(obj, mod);
@@ -53,16 +38,16 @@ namespace Testing.FancyMapper
         }
 
         /// <summary>
-        /// Tests mirroring the properties of a simple object into
-        /// a simple model nested inside this complex model. The
-        /// nested simple model and simple object should be equivalent
-        /// after this transformation.
+        ///     Tests mirroring the properties of a simple object into
+        ///     a simple model nested inside this complex model. The
+        ///     nested simple model and simple object should be equivalent
+        ///     after this transformation.
         /// </summary>
         [TestMethod]
         public void TestMirroringSimpleObjectIntoNestedSimpleModelInComplexModelShouldBeEquivalent()
         {
             //create a simple object with test data
-            SimpleObject obj = new SimpleObject()
+            var obj = new SimpleObject
             {
                 TestInt = 56223,
                 TestNullableInt = 30998,
@@ -70,7 +55,7 @@ namespace Testing.FancyMapper
             };
 
             //create a complex model with no data
-            ComplexModel mod = new ComplexModel();
+            var mod = new ComplexModel();
 
             //mirror
             FancyUtil.Mirror(obj, mod);
@@ -82,19 +67,19 @@ namespace Testing.FancyMapper
         }
 
         /// <summary>
-        /// Tests reflecting a single string property from a complex model into a simple object.
-        /// These properties should be equivalent after this transformation.
+        ///     Tests reflecting a single string property from a complex model into a simple object.
+        ///     These properties should be equivalent after this transformation.
         /// </summary>
         [TestMethod]
         public void TestReflectingSinglePropertyFromComplexModelIntoSimpleObjectShouldBeEquivalent()
         {
             //create a simple object with no data
-            SimpleObject obj = new SimpleObject();
-            
+            var obj = new SimpleObject();
+
             //create a complex model with test data
-            ComplexModel mod = new ComplexModel()
+            var mod = new ComplexModel
             {
-                PoorName = "Reflected String",
+                PoorName = "Reflected String"
             };
 
             //reflect
@@ -105,21 +90,21 @@ namespace Testing.FancyMapper
         }
 
         /// <summary>
-        /// Tests reflecting a simple model nested inside a complex model into a 
-        /// simple object. The nested simple model and the simple object should be
-        /// equivalent after this transformation.
+        ///     Tests reflecting a simple model nested inside a complex model into a
+        ///     simple object. The nested simple model and the simple object should be
+        ///     equivalent after this transformation.
         /// </summary>
         [TestMethod]
         public void TestReflectingNestedSimpleObjectIntoSimpleModelShouldBeEquivalent()
         {
             //create a simple object with no data
-            SimpleObject obj = new SimpleObject();
+            var obj = new SimpleObject();
 
             //create a complex model with test data
-            ComplexModel mod = new ComplexModel()
+            var mod = new ComplexModel
             {
                 PoorName = "Complex Object Name",
-                NestedModel = new SimpleModel()
+                NestedModel = new SimpleModel
                 {
                     PoorlyNamedString = "Reflected string!",
                     PoorlyNamedInt = 2003,
@@ -137,22 +122,21 @@ namespace Testing.FancyMapper
         }
 
         /// <summary>
-        /// Tests mirroring a complex object into a complex model. The properties on
-        /// the model should be equivalent to those in the object after this
-        /// transformation.
-        /// 
-        /// Note that the routing for the nested model must use the Deep flag
-        /// because it needs to be re-evaluated against its target to determine what
-        /// its properties mirror against.
+        ///     Tests mirroring a complex object into a complex model. The properties on
+        ///     the model should be equivalent to those in the object after this
+        ///     transformation.
+        ///     Note that the routing for the nested model must use the Deep flag
+        ///     because it needs to be re-evaluated against its target to determine what
+        ///     its properties mirror against.
         /// </summary>
         [TestMethod]
         public void TestMirroringComplexObjectIntoComplexModelShouldBeEquivalent()
         {
             //create a complex object with test data
-            ComplexObject obj = new ComplexObject()
+            var obj = new ComplexObject
             {
                 Name = "A complex object",
-                NestedObject = new SimpleObject()
+                NestedObject = new SimpleObject
                 {
                     TestInt = 500,
                     TestNullableInt = 300,
@@ -161,7 +145,7 @@ namespace Testing.FancyMapper
             };
 
             //create a complex model with no data
-            ComplexModel mod = new ComplexModel();
+            var mod = new ComplexModel();
 
             //mirror
             FancyUtil.Mirror(obj, mod);
@@ -174,22 +158,22 @@ namespace Testing.FancyMapper
         }
 
         /// <summary>
-        /// This tests being able to reflect a model into an object that has both a
-        /// null property and a null nested child object that has child properties that
-        /// need to be written to. It will automatically instantiate any null references
-        /// it encounters traversing the route.
+        ///     This tests being able to reflect a model into an object that has both a
+        ///     null property and a null nested child object that has child properties that
+        ///     need to be written to. It will automatically instantiate any null references
+        ///     it encounters traversing the route.
         /// </summary>
         [TestMethod]
         public void TestReflectingComplexModelIntoComplexObjectShouldBeEquivalent()
         {
             //create a complex object with no data
-            ComplexObject obj = new ComplexObject();
+            var obj = new ComplexObject();
 
             //create a complex model with test data
-            ComplexModel mod = new ComplexModel()
+            var mod = new ComplexModel
             {
                 PoorName = "Reflected name",
-                NestedModel = new SimpleModel()
+                NestedModel = new SimpleModel
                 {
                     PoorlyNamedInt = 456,
                     PoorlyNamedNullableInt = 1234,
@@ -208,12 +192,11 @@ namespace Testing.FancyMapper
         }
 
         /// <summary>
-        /// --Currently this is setup so that attempting to read the children of a null property
-        /// --will thrown a NullPointerException. It is possible to alter this behavior to silently
-        /// --ignore or log these so that null child objects are just skipped and as much of the object
-        /// --is mirrored into the model as possible.
-        /// 
-        /// NOPE: As of now this behavior is deprecated and this test is invalid.
+        ///     --Currently this is setup so that attempting to read the children of a null property
+        ///     --will thrown a NullPointerException. It is possible to alter this behavior to silently
+        ///     --ignore or log these so that null child objects are just skipped and as much of the object
+        ///     --is mirrored into the model as possible.
+        ///     NOPE: As of now this behavior is deprecated and this test is invalid.
         /// </summary>
         [TestMethod]
         public void TestMirroringComplexObjectWithNullObjectForNestedModelIntoComplexModelWillThrowException()
@@ -244,19 +227,19 @@ namespace Testing.FancyMapper
         }
 
         /// <summary>
-        /// This tests the ability of the router to resolve a route using recursion by
-        /// traversing 3 notes.
+        ///     This tests the ability of the router to resolve a route using recursion by
+        ///     traversing 3 notes.
         /// </summary>
         [TestMethod]
         public void TestMirroringOverlyComplexObjectIntoComplexModelShouldBeEquivalent()
         {
             //create an overly complex object with test data
-            OverlyComplexObject obj = new OverlyComplexObject()
+            var obj = new OverlyComplexObject
             {
-                NestedComplexObject = new ComplexObject()
+                NestedComplexObject = new ComplexObject
                 {
                     Name = "Deeply Nested",
-                    NestedObject = new SimpleObject()
+                    NestedObject = new SimpleObject
                     {
                         TestString = "Really Deeply Nested",
                         TestInt = 123,
@@ -266,7 +249,7 @@ namespace Testing.FancyMapper
             };
 
             //create an empty model
-            ComplexModel mod = new ComplexModel();
+            var mod = new ComplexModel();
 
             //mirror
             FancyUtil.Mirror(obj, mod);
@@ -274,23 +257,24 @@ namespace Testing.FancyMapper
             //check equivalence
             Assert.AreEqual(obj.NestedComplexObject.Name, mod.PoorName);
             Assert.AreEqual(obj.NestedComplexObject.NestedObject.TestInt, mod.NestedModel.PoorlyNamedInt);
-            Assert.AreEqual(obj.NestedComplexObject.NestedObject.TestNullableInt, mod.NestedModel.PoorlyNamedNullableInt);
+            Assert.AreEqual(obj.NestedComplexObject.NestedObject.TestNullableInt,
+                mod.NestedModel.PoorlyNamedNullableInt);
             Assert.AreEqual(obj.NestedComplexObject.NestedObject.TestString, mod.NestedModel.PoorlyNamedString);
         }
 
         /// <summary>
-        /// Tests mirroring a complex object into a complex model. Unlike in the other test, the
-        /// complex model has a null nested model. This should be instantiated automatically to
-        /// inflate the object.
+        ///     Tests mirroring a complex object into a complex model. Unlike in the other test, the
+        ///     complex model has a null nested model. This should be instantiated automatically to
+        ///     inflate the object.
         /// </summary>
         [TestMethod]
         public void TestMirroringComplexObjectIntoComplexModelWithNullDestinationShouldBeEquivalent()
         {
             //create a complex object with test data
-            ComplexObject obj = new ComplexObject()
+            var obj = new ComplexObject
             {
                 Name = "A complex object",
-                NestedObject = new SimpleObject()
+                NestedObject = new SimpleObject
                 {
                     TestInt = 500,
                     TestNullableInt = 300,
@@ -299,7 +283,7 @@ namespace Testing.FancyMapper
             };
 
             //create a complex model with no data
-            ComplexModel mod = new ComplexModel();
+            var mod = new ComplexModel();
 
             //set properties to null on the model
             mod.NestedModel = null;

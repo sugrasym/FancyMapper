@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Fancy
 {
-    public static class FancyUtil
+    public static class FancyUtil<T>
     {
         /// <summary>
         ///     Using custom attributes, maps the source object's values
@@ -14,7 +14,8 @@ namespace Fancy
         /// </summary>
         /// <param name="source"></param>
         /// <param name="destination"></param>
-        public static void Mirror(object source, object destination)
+        /// <returns>The destination object</returns>
+        public static T Mirror(object source, T destination)
         {
             var pairs = new List<Tuple<MirrorAttribute, PropertyInfo>>();
             //find mirror attributes on the destination object
@@ -60,6 +61,7 @@ namespace Fancy
                     HandleMirrorExceptions(e);
                 }
             }
+            return destination;
         }
 
         private static void HandleMirrorExceptions(Exception e)
@@ -83,7 +85,8 @@ namespace Fancy
         /// </summary>
         /// <param name="source"></param>
         /// <param name="destination"></param>
-        public static void Reflect(object source, object destination)
+        /// <returns>The destination object</returns>
+        public static T Reflect(object source, T destination)
         {
             var pairs = new List<Tuple<MirrorAttribute, PropertyInfo>>();
             //find mirror attributes on the source object
@@ -123,6 +126,7 @@ namespace Fancy
             {
                 FancyReflect.MapReflect(pair.Item1, pair.Item2, source, destination);
             }
+            return destination;
         }
 
         /// <summary>
